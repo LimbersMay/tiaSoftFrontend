@@ -1,0 +1,24 @@
+<div class="text-lg bg-primary p-4 flex flex-row bg-black-alpha-800 align-items-center justify-content-center gap-8">
+  <h4>
+    Iniciar sesión
+    <br>
+    Bienvenido a TiaSoft
+  </h4>
+
+  <img
+    src="./assets/tiaKaua.jpeg"
+    alt="TiaSoft"
+    class="w-8rem h-6rem border-round-lg"
+  >
+</div>
+
+<div class="flex bg-white flex-column gap-3 p-5">
+  <input pInputText type="text" placeholder="Correo">
+  <input pInputText type="password" placeholder="Contraseña">
+
+  <p-button label="Iniciar sesión"></p-button>
+
+  <div class="flex justify-content-end">
+    <a routerLink="/auth/new-account">¿No tienes una cuenta?</a>
+  </div>
+</div>
