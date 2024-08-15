@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {ValidatorsService} from "../../../shared/services/validators.service";
-import {LoginForm} from "../login-page/login-page.component";
 
 interface SignInForm {
   fullName: FormControl<string>;
