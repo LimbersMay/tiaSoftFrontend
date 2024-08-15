@@ -3,7 +3,7 @@ import {inject} from "@angular/core";
 import {AuthService} from "../services/auth.service";
 import {AuthStatus} from "../interfaces/auth-status.enum";
 
-export const isNotAuthenticatedGuard: CanActivateFn = (route, state) => {
+export const isNotAuthenticatedGuard: CanActivateFn = () => {
 
   const authService = inject(AuthService);
   const router = inject(Router);
