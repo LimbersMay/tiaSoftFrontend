@@ -1,0 +1,52 @@
+<div class="text-lg bg-primary p-4 flex flex-row bg-black-alpha-800 align-items-center justify-content-center gap-8">
+  <h4>
+    Iniciar sesión
+    <br>
+    Bienvenido a TiaSoft
+  </h4>
+
+  <img
+    src="./assets/tiaKaua.jpeg"
+    alt="TiaSoft"
+    class="w-8rem h-6rem border-round-lg"
+  >
+</div>
+
+<div class="flex bg-white flex-column gap-3 p-5">
+
+  <form class="flex flex-column gap-3" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <input
+      pInputText
+      type="text"
+      placeholder="Correo"
+      [ngClass]="getControlClass('email')"
+      formControlName="email"
+    >
+
+    <span *ngIf="isValidField('email')" class="p-error">
+      {{ getFieldError('email')}}
+    </span>
+
+    <input
+      pInputText
+      type="password"
+      placeholder="Contraseña"
+      [ngClass]="getControlClass('password')"
+      formControlName="password"
+    >
+
+    <span *ngIf="isValidField('password')" class="p-error">
+      {{ getFieldError('password')}}
+    </span>
+
+    <span *ngIf="anErrorOccurred" class="p-error">
+      {{ errorMessage }}
+    </span>
+
+    <p-button type="submit" label="Iniciar sesión"></p-button>
+  </form>
+
+  <div class="flex justify-content-end">
+    <a routerLink="/auth/new-account">¿No tienes una cuenta?</a>
+  </div>
+</div>
