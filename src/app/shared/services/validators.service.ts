@@ -26,6 +26,8 @@ export class ValidatorsService {
           return 'El correo electrónico no es válido'
         case 'notEqual':
           return 'Las contraseñas no coinciden'
+        case 'emailTaken':
+          return 'El correo electrónico ya está en uso'
       }
     }
 

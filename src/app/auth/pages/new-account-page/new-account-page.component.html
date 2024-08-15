@@ -19,13 +19,13 @@
     <input
       pInputText
       type="text"
-      [ngClass]="getControlClass('fullName')"
+      [ngClass]="getControlClass('username')"
       placeholder="Nombre completo"
-      formControlName="fullName"
+      formControlName="username"
     />
 
-    <span *ngIf="isValidField('fullName')" class="p-error">
-      {{ getFieldError('fullName')}}
+    <span *ngIf="isValidField('username')" class="p-error">
+      {{ getFieldError('username')}}
     </span>
 
     <input
@@ -64,7 +64,11 @@
       {{ getFieldError('confirmPassword')}}
     </span>
 
-    <p-button type="submit" label="Iniciar sesión"></p-button>
+    <span *ngIf="anErrorOccurred" class="p-error">
+      {{ errorMessage }}
+    </span>
+
+    <p-button type="submit" label="Registrarse"></p-button>
   </form>
 
   <div class="flex justify-content-end">
