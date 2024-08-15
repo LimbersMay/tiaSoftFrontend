@@ -1,6 +1,6 @@
 <div class="text-lg bg-primary p-4 flex flex-row bg-black-alpha-800 align-items-center justify-content-center gap-8">
   <h4>
-    Crear cuenta
+    Iniciar sesión
     <br>
     Bienvenido a TiaSoft
   </h4>
@@ -8,18 +8,64 @@
   <img
     src="./assets/tiaKaua.jpeg"
     alt="TiaSoft"
-    class="w-8rem h-6rem border-round"
+    class="w-8rem h-6rem border-round-lg"
   >
 </div>
 
 <div class="flex bg-white flex-column gap-3 p-5">
 
-  <input pInputText type="text" placeholder="Nombre completo">
-  <input pInputText type="text" placeholder="Correo">
-  <input pInputText type="password" placeholder="Contraseña">
-  <input pInputText type="password" placeholder="Repetir contraseña">
+  <form class="flex flex-column gap-3" [formGroup]="signInForm" (ngSubmit)="onSubmit()" autocomplete="off">
 
-  <p-button label="Registrarse"></p-button>
+    <input
+      pInputText
+      type="text"
+      [ngClass]="getControlClass('fullName')"
+      placeholder="Nombre completo"
+      formControlName="fullName"
+    />
+
+    <span *ngIf="isValidField('fullName')" class="p-error">
+      {{ getFieldError('fullName')}}
+    </span>
+
+    <input
+      pInputText
+      type="email"
+      [ngClass]="getControlClass('email')"
+      placeholder="Correo electrónico"
+      formControlName="email"
+    />
+
+    <span *ngIf="isValidField('email')" class="p-error">
+      {{ getFieldError('email')}}
+    </span>
+
+    <input
+      pInputText
+      type="password"
+      [ngClass]="getControlClass('password')"
+      placeholder="Contraseña"
+      formControlName="password"
+    />
+
+    <span *ngIf="isValidField('password')" class="p-error">
+      {{ getFieldError('password')}}
+    </span>
+
+    <input
+      pInputText
+      type="password"
+      [ngClass]="getControlClass('confirmPassword')"
+      placeholder="Confirmar contraseña"
+      formControlName="confirmPassword"
+    />
+
+    <span *ngIf="isValidField('confirmPassword')" class="p-error">
+      {{ getFieldError('confirmPassword')}}
+    </span>
+
+    <p-button type="submit" label="Iniciar sesión"></p-button>
+  </form>
 
   <div class="flex justify-content-end">
     <a routerLink="/auth/login">¿Ya tienes una cuenta?</a>
