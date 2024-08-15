@@ -13,10 +13,38 @@
 </div>
 
 <div class="flex bg-white flex-column gap-3 p-5">
-  <input pInputText type="text" placeholder="Correo">
-  <input pInputText type="password" placeholder="Contraseña">
 
-  <p-button label="Iniciar sesión"></p-button>
+  <form class="flex flex-column gap-3" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <input
+      pInputText
+      type="text"
+      placeholder="Correo"
+      [ngClass]="getControlClass('email')"
+      formControlName="email"
+    >
+
+    <span *ngIf="isValidField('email')" class="p-error">
+      {{ getFieldError('email')}}
+    </span>
+
+    <input
+      pInputText
+      type="password"
+      placeholder="Contraseña"
+      [ngClass]="getControlClass('password')"
+      formControlName="password"
+    >
+
+    <span *ngIf="isValidField('password')" class="p-error">
+      {{ getFieldError('password')}}
+    </span>
+
+    <span *ngIf="anErrorOccurred" class="p-error">
+      {{ errorMessage }}
+    </span>
+
+    <p-button type="submit" label="Iniciar sesión"></p-button>
+  </form>
 
   <div class="flex justify-content-end">
     <a routerLink="/auth/new-account">¿No tienes una cuenta?</a>
