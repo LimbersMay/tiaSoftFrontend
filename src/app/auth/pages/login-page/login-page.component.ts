@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 import {ErrorService} from "../../../shared/services/error.service";
 import {ValidatorsService} from "../../../shared/services/validators.service";
+import {Router} from "@angular/router";
 
 export interface LoginForm {
   email: FormControl<string>;
@@ -28,7 +29,8 @@ export class LoginPageComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private errorService: ErrorService,
-    private validatorsService: ValidatorsService
+    private validatorsService: ValidatorsService,
+    private router: Router
   ) {}
 
   public isValidField(field: keyof LoginForm): boolean | null {
@@ -57,7 +59,7 @@ export class LoginPageComponent {
 
     return this.authService.login(email, password)
       .subscribe({
-        next: () => console.log('Login success'),
+        next: () => this.router.navigate(['/dashboard']),
         error: (error) => {
           this.anErrorOccurred = true;
           this.errorMessage = this.errorService.getErrorMessage(error);
