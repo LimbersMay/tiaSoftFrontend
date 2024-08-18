@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import {SideNavLayoutComponent} from "./layouts/side-nav-layout/side-nav-layout.component";
-import {RouterLink, RouterOutlet} from "@angular/router";
+import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {PrimeNgModule} from "../prime-ng/prime-ng.module";
 import {StyleClassModule} from "primeng/styleclass";
 
@@ -13,7 +13,8 @@ import {StyleClassModule} from "primeng/styleclass";
     RouterOutlet,
     RouterLink,
     PrimeNgModule,
-    StyleClassModule
+    StyleClassModule,
+    RouterLinkActive
   ],
   exports: [
     SideNavLayoutComponent
