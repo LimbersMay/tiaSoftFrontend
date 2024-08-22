@@ -20,6 +20,11 @@ const routes: Routes = [
     loadChildren: () => import('./users-management/users-management.module').then(m => m.UsersManagementModule)
   },
   {
+    path: 'roles',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./roles-management/roles-management.module').then(m => m.RolesManagementModule)
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
