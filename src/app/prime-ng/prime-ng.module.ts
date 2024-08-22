@@ -6,6 +6,7 @@ import {TableModule} from "primeng/table";
 import {TagModule} from "primeng/tag";
 import {DialogModule} from "primeng/dialog";
 import {MultiSelectModule} from "primeng/multiselect";
+import {ToastModule} from "primeng/toast";
 
 
 
@@ -19,7 +20,8 @@ import {MultiSelectModule} from "primeng/multiselect";
     TableModule,
     TagModule,
     DialogModule,
-    MultiSelectModule
+    MultiSelectModule,
+    ToastModule
   ]
 })
 export class PrimeNgModule { }
