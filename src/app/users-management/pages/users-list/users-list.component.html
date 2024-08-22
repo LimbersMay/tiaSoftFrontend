@@ -1,0 +1,151 @@
+<!-- Header -->
+<div class="flex flex-row gap-3 align-items-center justify-content-between">
+  <span class="text-2xl font-bold text-color-secondary">
+    Gestion de usuarios
+  </span>
+  <p-button
+    label="Crear usuario"
+    icon="pi pi-plus"
+    class="p-button-success"
+    (click)="showDialog()"
+  ></p-button>
+</div>
+
+<p-table
+  [value]="users"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  styleClass="p-datatable-striped"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  responsiveLayout="stack"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 30%;">Nombre</th>
+      <th style="width: 30%;">Correo electrónico</th>
+      <th style="width: 20%;">Roles</th>
+      <th style="width: 20%;">Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-user>
+    <tr>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email }}</td>
+      <td>
+        <div class="flex gap-2">
+          <p-tag *ngFor="let role of user.roles" severity="info">
+            {{ role }}
+          </p-tag>
+        </div>
+      </td>
+      <td class="flex gap-2">
+        <button
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-success"
+          (click)="showDialog(user)"
+        ></button>
+        <button
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-danger"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Dialog -->
+<p-dialog [header]="currentUser.userId ? 'Editar usuario' : 'Crear usuario'"
+          [modal]="true" [(visible)]="display"
+          (onHide)="closeDialog()"
+          [dismissableMask]="true"
+>
+  <span class="p-text-secondary block mb-5">Actualiza la información</span>
+  <form action="" [formGroup]="userForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3" autocomplete="off">
+    <div class="flex align-items-center gap-3">
+      <label for="username" class="font-semibold w-6rem">Nombre</label>
+      <input
+        formControlName="username"
+        pInputText id="username"
+        class="flex-auto"
+        autocomplete="off"
+        [ngClass]="getControlClass('username')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('username')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('username') }}
+    </span>
+
+
+    <div class="flex align-items-center gap-3">
+      <label for="role" class="font-semibold w-6rem">Rol</label>
+      <p-multiSelect
+        [options]="roles"
+        [showHeader]="false"
+        formControlName="roles"
+        id="role"
+        optionLabel="name"
+        placeholder="Select roles"
+        [ngClass]="getControlClass('roles')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('roles')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('roles') }}
+    </span>
+
+    <div class="flex align-items-center gap-3">
+      <label for="email" class="font-semibold w-6rem">Correo</label>
+      <input
+        pInputText
+        id="email"
+        class="flex-auto"
+        type="email"
+        formControlName="email"
+        [ngClass]="getControlClass('email')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('email')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('email') }}
+    </span>
+
+    <div class="flex align-items-center gap-3">
+      <label for="password" class="font-semibold w-6rem">Contraseña</label>
+      <input
+        pInputText
+        id="password"
+        class="flex-auto"
+        autocomplete="off"
+        formControlName="password"
+        type="password"
+      />
+    </div>
+
+
+    <div class="flex justify-content-end gap-2 mt-4">
+      <p-button label="Cancel" severity="secondary" (onClick)="closeDialog()"/>
+      <p-button label="Save" type="submit"/>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- TOAST -->
+<p-toast position="top-right"></p-toast>
+
