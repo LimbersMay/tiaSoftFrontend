@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environments} from "../../../../environments/environments";
-import {catchError, map, Observable, tap, throwError} from "rxjs";
+import {catchError, map, Observable, throwError} from "rxjs";
 import {User} from "../../auth/interfaces/user.interface";
 
 @Injectable({
