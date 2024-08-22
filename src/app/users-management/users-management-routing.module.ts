@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {MainPageComponent} from "./pages/main-page/main-page.component";
 import {SideNavLayoutComponent} from "../shared/layouts/side-nav-layout/side-nav-layout.component";
+import {UsersListComponent} from "./pages/users-list/users-list.component";
 
 const routes: Routes = [
   {
@@ -9,19 +9,19 @@ const routes: Routes = [
     component: SideNavLayoutComponent,
     children: [
       {
-        path: '',
-        component: MainPageComponent
+        path: 'list',
+        component: UsersListComponent
       },
       {
         path: "**",
-        redirectTo: ''
+        redirectTo: 'list'
       }
     ]
-  },
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DashboardRoutingModule { }
+export class UsersManagementRoutingModule { }
