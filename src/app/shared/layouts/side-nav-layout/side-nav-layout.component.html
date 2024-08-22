@@ -1,6 +1,9 @@
 <div class="flex flex-row w-full" style="height: 98vh">
   <!-- SIDENAV -->
-  <div class="flex flex-column w-24rem bg-gray-50">
+  <div
+    class="bg-gray-50 md:flex md:flex-column md:w-24rem transition-delay-150"
+    [ngClass]="{'hidden': !showNavBar}"
+  >
     <div class="flex align-items-center justify-content-between px-4 pt-3 flex-shrink-0">
                 <span class="inline-flex align-items-center gap-2">
 
@@ -28,6 +31,7 @@
             <li>
               <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple no-underline"
                  routerLink="/dashboard"
+                 [routerLinkActive]="['text-primary', 'bg-primary-100']"
               >
                 <i class="pi pi-chart-pie mr-2"></i>
                 <span class="font-medium">Resumen</span>
@@ -78,7 +82,10 @@
               </a>
             </li>
             <li>
-              <a pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple">
+              <a
+                pRipple class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors p-ripple"
+                (click)="logout()"
+              >
                 <i class="pi pi-sign-out mr-2"></i>
                 <span class="font-medium">Logout</span>
               </a>
@@ -91,6 +98,19 @@
 
   <!-- MAIN CONTENT -->
   <div class="flex flex-column w-full p-3">
-    <router-outlet></router-outlet>
+    <router-outlet>
+      <!-- Open menu icon only visible on mobile -->
+      <div class="bg-gray-50 p-1 flex align-items-center justify-content-between md:hidden">
+        <button
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-bars"
+          class="p-button-rounded p-button-text p-button-sm"
+          (click)="toggleNavBar()"
+        ></button>
+      </div>
+
+    </router-outlet>
   </div>
 </div>
