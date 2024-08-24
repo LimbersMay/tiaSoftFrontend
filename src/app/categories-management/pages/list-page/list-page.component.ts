@@ -106,7 +106,7 @@ export class ListPageComponent implements OnInit{
   public ngOnInit() {
     this.categoriesService.getCategories().subscribe({
       next: categories => this.categories = categories,
-      error: err => console.error()
+      error: () => console.error()
     });
   }
 }
