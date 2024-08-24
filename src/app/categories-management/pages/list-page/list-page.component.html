@@ -1,0 +1,135 @@
+<!-- Header -->
+<div class="flex flex-row gap-3 align-items-center justify-content-between">
+  <span class="text-2xl font-bold text-color-secondary">
+    Gestion de categorias
+  </span>
+  <p-button
+    label="Crear categoria"
+    icon="pi pi-plus"
+    class="p-button-success"
+    (click)="showDialog()"
+  ></p-button>
+</div>
+
+<p-table
+  #dt2
+  [value]="categories"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  styleClass="p-datatable-striped"
+  [paginator]="true"
+  [rows]="3"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [globalFilterFields]="['name', 'description']"
+  responsiveLayout="stack"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 40%;">Nombre</th>
+      <th style="width: 40%;">Descripción</th>
+      <th style="width: 20%;">Acciones</th>
+    </tr>
+
+    <tr>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="name"
+          placeholder="Buscar por nombre"
+          ariaLabel="Buscar por nombre"
+        />
+      </th>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="description"
+          placeholder="Buscar por descripción"
+          ariaLabel="Buscar por descripción"
+        />
+      </th>
+      <th>
+
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-category>
+    <tr>
+      <td>{{ category.name }}</td>
+      <td>{{ category.description }}</td>
+      <td class="flex gap-2">
+        <button
+          pButton
+          pRipple
+          type="button"
+          icon="pi pi-pencil"
+          (click)="showDialog(category)"
+          class="p-button-success"
+        ></button>
+        <button
+          pButton
+          pRipple
+          disabled
+          type="button"
+          icon="pi pi-trash"
+          class="p-button-danger"
+        ></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Dialog -->
+<p-dialog [header]="currentCategory.categoryId ? 'Editar categoria' : 'Crear categoria'"
+          [modal]="true" [(visible)]="display"
+          (onHide)="closeDialog()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+>
+  <span class="p-text-secondary block mb-5">Proporciona la siguiente información</span>
+  <form action="" [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3" autocomplete="off">
+
+    <div class="flex align-items-center gap-3">
+      <label for="name" class="font-semibold w-6rem">Nombre</label>
+      <input
+        formControlName="name"
+        pInputText id="name"
+        class="flex-auto"
+        autocomplete="off"
+        [ngClass]="getControlClass('name')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('name')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('name') }}
+    </span>
+
+    <div class="flex align-items-center gap-3">
+      <label for="description" class="font-semibold w-6rem">Descripción</label>
+      <input
+        pInputText
+        id="description"
+        class="flex-auto"
+        type="text"
+        formControlName="description"
+        [ngClass]="getControlClass('description')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('description')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('description') }}
+    </span>
+
+    <div class="flex justify-content-end gap-2 mt-4">
+      <p-button label="Cancel" severity="secondary" (onClick)="closeDialog()"/>
+      <p-button label="Save" type="submit"/>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- TOAST -->
+<p-toast position="top-right"></p-toast>
