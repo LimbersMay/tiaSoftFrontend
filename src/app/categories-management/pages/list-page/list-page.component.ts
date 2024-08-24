@@ -75,7 +75,7 @@ export class ListPageComponent implements OnInit{
             detail: 'Categoria creada correctamente'
           });
         },
-        error: err => this.messageService.add({
+        error: () => this.messageService.add({
           severity: 'error',
           summary: 'Error',
           detail: 'Ocurrió un error al crear la categoría'
@@ -95,7 +95,7 @@ export class ListPageComponent implements OnInit{
           detail: 'Categoria actualizada correctamente'
         });
       },
-      error: err => this.messageService.add({
+      error: () => this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'Ocurrió un error al actualizar la categoría'
@@ -106,7 +106,7 @@ export class ListPageComponent implements OnInit{
   public ngOnInit() {
     this.categoriesService.getCategories().subscribe({
       next: categories => this.categories = categories,
-      error: err => console.error(err)
+      error: err => console.error()
     });
   }
 }
