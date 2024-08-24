@@ -20,7 +20,18 @@ export class AppComponent implements OnInit{
   public finishedAuthChecking: boolean = false;
 
   ngOnInit() {
+
     this.primengConfig.ripple = true;
+
+    this.primengConfig.setTranslation({
+      startsWith: 'Empieza con',
+      contains: 'Contiene',
+      notContains: 'No contiene',
+      endsWith: 'Termina con',
+      equals: 'Igual',
+      notEquals: 'No igual',
+      noFilter: 'Sin filtro',
+    })
 
     this.authService.checkAuthStatus()
       .subscribe({
@@ -33,6 +44,8 @@ export class AppComponent implements OnInit{
           this.finishedAuthChecking = true;
           this.router.navigate(['/auth/login']);
         },
-      })
+      });
+
+
   }
 }
