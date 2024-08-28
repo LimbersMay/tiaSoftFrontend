@@ -16,6 +16,10 @@ export class SideNavLayoutComponent {
     private readonly router: Router,
   ) {}
 
+  public get currentUser() {
+    return this.authService.currentUser;
+  }
+
   logout() {
     this.authService.logout().subscribe({
       next: () => this.router.navigate(['/auth/login']),
