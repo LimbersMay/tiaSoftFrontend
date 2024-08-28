@@ -5,6 +5,7 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {ValidatorsService} from "../../../shared/services/validators.service";
 import {Category} from "../../../categories-management/interfaces/category.interface";
 import {CategoriesService} from "../../../categories-management/services/categories.service";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-list-page',
@@ -32,6 +33,7 @@ export class ListPageComponent implements OnInit {
     private readonly categoriesService: CategoriesService,
     private readonly fb: FormBuilder,
     private readonly validatorsService: ValidatorsService,
+    private readonly messageService: MessageService
   ) {}
 
   public showDialog(product?: Product): void {
@@ -78,6 +80,12 @@ export class ListPageComponent implements OnInit {
 
           this.products.unshift(product);
           this.closeDialog();
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Producto creado',
+            detail: 'Producto creado correctamente'
+          });
         },
         error: (err) => {
           console.error(err);
@@ -90,6 +98,12 @@ export class ListPageComponent implements OnInit {
         const index = this.products.findIndex((p) => p.productId === product.productId);
         this.products[index] = product;
         this.closeDialog();
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Producto actualizado',
+          detail: 'Producto actualizado correctamente'
+        });
       },
       error: (err) => {
         console.error(err);
