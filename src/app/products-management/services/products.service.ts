@@ -3,7 +3,6 @@ import {environments} from "../../../../environments/environments";
 import {HttpClient} from "@angular/common/http";
 import {catchError, map, Observable, throwError} from "rxjs";
 import {Product} from "../interfaces/product.interface";
-import {ProductResponse} from "../interfaces/product-response.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +16,9 @@ export class ProductsService {
   public getProducts(): Observable<Product[]> {
     const url = `${this.baseUrl}/products`;
 
-    return this.httpClient.get<ProductResponse[]>(url, {withCredentials: true})
+    return this.httpClient.get<Product[]>(url, {withCredentials: true})
       .pipe(
-        map((resp: ProductResponse[]) => {
-          return resp.map((product) => ({
-            ...product,
-            category: product.category.name
-          }));
-        }),
+        map((products) => products),
         catchError( (err) => throwError(() => err))
       );
   }
