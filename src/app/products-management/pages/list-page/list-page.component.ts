@@ -5,12 +5,6 @@ import {FormBuilder, Validators} from "@angular/forms";
 import {ValidatorsService} from "../../../shared/services/validators.service";
 import {Category} from "../../../categories-management/interfaces/category.interface";
 import {CategoriesService} from "../../../categories-management/services/categories.service";
-import {MenuItem} from "primeng/api";
-
-interface CategoryItem {
-  code: string;
-  name: string;
-}
 
 @Component({
   selector: 'app-list-page',
