@@ -30,6 +30,11 @@ const routes: Routes = [
     loadChildren: () => import('./categories-management/categories-management.module').then(m => m.CategoriesManagementModule)
   },
   {
+    path: 'products',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./products-management/products-management.module').then(m => m.ProductsManagementModule)
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
