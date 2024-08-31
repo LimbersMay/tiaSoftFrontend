@@ -7,6 +7,12 @@ import {TagModule} from "primeng/tag";
 import {DialogModule} from "primeng/dialog";
 import {MultiSelectModule} from "primeng/multiselect";
 import {ToastModule} from "primeng/toast";
+import {IconFieldModule} from "primeng/iconfield";
+import {InputIconModule} from "primeng/inputicon";
+import {InputSwitchModule} from "primeng/inputswitch";
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {DropdownModule} from "primeng/dropdown";
 
 
 
@@ -21,7 +27,13 @@ import {ToastModule} from "primeng/toast";
     TagModule,
     DialogModule,
     MultiSelectModule,
-    ToastModule
+    ToastModule,
+    IconFieldModule,
+    InputIconModule,
+    InputSwitchModule,
+    ToggleButtonModule,
+    InputTextareaModule,
+    DropdownModule
   ]
 })
 export class PrimeNgModule { }

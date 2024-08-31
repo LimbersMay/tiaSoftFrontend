@@ -28,6 +28,8 @@ export class ValidatorsService {
           return 'Las contraseñas no coinciden'
         case 'emailTaken':
           return 'El correo electrónico ya está en uso'
+        case 'min':
+          return `El valor mínimo es ${errors['min'].min}`
       }
     }
 
