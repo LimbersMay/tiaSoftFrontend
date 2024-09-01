@@ -6,7 +6,7 @@ import {PrimeNgModule} from "../prime-ng/prime-ng.module";
 import {SharedModule} from "../shared/shared.module";
 import { UsersListComponent } from './pages/users-list/users-list.component';
 import {HttpClientModule} from "@angular/common/http";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -20,7 +20,8 @@ import {ReactiveFormsModule} from "@angular/forms";
     PrimeNgModule,
     SharedModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class UsersManagementModule { }
