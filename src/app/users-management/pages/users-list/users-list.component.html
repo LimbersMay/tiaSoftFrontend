@@ -13,12 +13,13 @@
 
 <p-table
   [value]="users"
-  [tableStyle]="{ 'min-width': '50rem' }"
   styleClass="p-datatable-striped"
+  [scrollable]="true"
+  [scrollHeight]="'calc(100vh - 200px)'"
+  responsiveLayout="stack"
   [paginator]="true"
   [rows]="10"
-  [rowsPerPageOptions]="[5, 10, 20]"
-  responsiveLayout="stack"
+  [globalFilterFields]="['username, email, roles']"
 >
   <ng-template pTemplate="header">
     <tr>
@@ -26,6 +27,44 @@
       <th style="width: 30%;">Correo electrónico</th>
       <th style="width: 20%;">Roles</th>
       <th style="width: 20%;">Acciones</th>
+    </tr>
+
+    <tr>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="username"
+          placeholder="Buscar por nombre"
+          ariaLabel="Buscar por nombre"
+        />
+      </th>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="email"
+          placeholder="Buscar por correo"
+          ariaLabel="Buscar por correo"
+        />
+      </th>
+      <th>
+        <p-columnFilter field="roles" matchMode="hasRole" [showMenu]="false">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="roles" placeholder="Cualquiera"
+                           (onChange)="filter($event.value)" optionLabel="name" optionValue="code"
+                           appendTo="body"
+            >
+              <ng-template let-option pTemplate="item">
+                <div class="inline-block vertical-align-middle">
+                  <span class="ml-1 mt-1">{{ option.name }}</span>
+                </div>
+              </ng-template>
+            </p-multiSelect>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+
+      </th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-user>
