@@ -3,7 +3,7 @@ import {UsersService} from "../../services/users.service";
 import {User} from "../../../auth/interfaces/user.interface";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ValidatorsService} from "../../../shared/services/validators.service";
-import {MessageService} from "primeng/api";
+import {FilterService, MessageService} from "primeng/api";
 import {ErrorService} from "../../../shared/services/error.service";
 
 const ROLES = [
@@ -43,6 +43,7 @@ export class UsersListComponent implements OnInit {
     private readonly validatorsService: ValidatorsService,
     private readonly messageService: MessageService,
     private readonly errorService: ErrorService,
+    private readonly filterService: FilterService
   ) {}
 
   public showDialog(user?: User) {
@@ -123,6 +124,15 @@ export class UsersListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.filterService.register('hasRole', (value: string[], filter: string[]): boolean => {
+
+      if (filter === undefined || filter === null || filter.length === 0) {
+        return true;
+      }
+
+      return filter.some(role => value.includes(role));
+    });
+
     this.usersService.getUsers()
       .subscribe({
         next: (users: User[]) => this.users = users,
