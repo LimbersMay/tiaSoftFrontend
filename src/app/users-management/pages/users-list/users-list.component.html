@@ -47,7 +47,7 @@
         />
       </th>
       <th>
-        <p-columnFilter field="roles" matchMode="hasRole" [showMenu]="true">
+        <p-columnFilter field="roles" matchMode="hasRole" [showMenu]="false">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
             <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="roles" placeholder="Cualquiera"
                            (onChange)="filter($event.value)" optionLabel="name" optionValue="code"
