@@ -73,7 +73,7 @@
         </div>
 
       </th>
-      <th style="width: 15%;">Acciones</th>
+      <th>Acciones</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-product>
@@ -96,13 +96,13 @@
         />
       </td>
       <td>{{ product.category }}</td>
-      <td class="flex gap-2">
+      <td>
         <button
           pButton
           pRipple
           type="button"
           icon="pi pi-pencil"
-          class="p-button-success"
+          class="p-button-success mr-2"
           (click)="showDialog(product)"
         ></button>
         <button
