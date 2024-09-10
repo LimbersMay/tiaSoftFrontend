@@ -7,9 +7,9 @@ import {FilterService, MessageService} from "primeng/api";
 import {ErrorService} from "../../../shared/services/error.service";
 
 const ROLES = [
-  "Administrador",
   "Mesero",
-  "Cajero"
+  "Gerente",
+  "Capitan"
 ];
 
 @Component({
