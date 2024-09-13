@@ -17,6 +17,6 @@ export class ErrorService {
   };
 
   public getErrorMessage(errorCode: ErrorCodes): string {
-    return this.errorMessages[errorCode] || 'Ocurrió un error desconocido';
+    return this.errorMessages[errorCode] || errorCode;
   }
 }
