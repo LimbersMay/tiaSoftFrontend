@@ -13,6 +13,8 @@ import {InputSwitchModule} from "primeng/inputswitch";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {DropdownModule} from "primeng/dropdown";
+import {InputNumberModule} from "primeng/inputnumber";
+import {TooltipModule} from "primeng/tooltip";
 
 
 
@@ -33,7 +35,9 @@ import {DropdownModule} from "primeng/dropdown";
     InputSwitchModule,
     ToggleButtonModule,
     InputTextareaModule,
-    DropdownModule
+    DropdownModule,
+    InputNumberModule,
+    TooltipModule
   ]
 })
 export class PrimeNgModule { }
