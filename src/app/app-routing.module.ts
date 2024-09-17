@@ -40,6 +40,11 @@ const routes: Routes = [
     loadChildren: () => import('./areas-management/areas-management.module').then(m => m.AreasManagementModule)
   },
   {
+    path: 'tables',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./tables-management/tables-management.module').then(m => m.TablesManagementModule)
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'

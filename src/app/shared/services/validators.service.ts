@@ -30,6 +30,8 @@ export class ValidatorsService {
           return 'El correo electrónico ya está en uso'
         case 'min':
           return `El valor mínimo es ${errors['min'].min}`
+        case 'tableNameTaken':
+          return 'El nombre de la mesa ya está en uso'
       }
     }
 

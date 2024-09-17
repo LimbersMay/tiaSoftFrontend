@@ -31,6 +31,10 @@ export class AppComponent implements OnInit{
       equals: 'Igual',
       notEquals: 'No igual',
       noFilter: 'Sin filtro',
+      lt: 'Menor que',
+      lte: 'Menor o igual que',
+      gt: 'Mayor que',
+      gte: 'Mayor o igual que'
     })
 
     this.authService.checkAuthStatus()

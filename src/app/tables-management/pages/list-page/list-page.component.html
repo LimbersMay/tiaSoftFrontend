@@ -1,0 +1,280 @@
+<!-- Header -->
+<div class="flex flex-column gap-3 align-items-center justify-content-between bg-gray-50 p-2 md:flex-row w-full">
+  <span class="text-2xl font-bold text-color-secondary">
+    Gestion de mesas
+  </span>
+  <div class="flex justify-content-between align-items-center gap-3 flex-column md:flex-row">
+    <button
+      pButton
+      label="Crear mesa"
+      icon="pi pi-plus"
+      class="p-button-primary w-full"
+      (click)="showDialog()"
+    ></button>
+
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Buscar mesa..."  (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+    </span>
+  </div>
+</div>
+
+<p-table
+  #dt
+  [value]="tables"
+  styleClass="p-datatable-striped"
+  [scrollable]="true"
+  [scrollHeight]="'calc(100vh - 200px)'"
+  [paginator]="true"
+  [rows]="5"
+  [globalFilterFields]="['name', 'customers', 'user.username', 'area.name', 'tableStatus.name']"
+  responsiveLayout="stack"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 15%">
+        <div class="flex align-items-center">
+          Nombre
+          <p-columnFilter type="text" field="name" display="menu"/>
+        </div>
+      </th>
+      <th style="width: 15%">
+        <div class="flex align-items-center">
+          Autorizado por
+          <p-columnFilter type="numeric" field="customers" display="menu"/>
+        </div>
+      </th>
+      <th style="width: 10%">
+        <div class="flex align-items-center">
+          Total
+          <p-columnFilter type="numeric" field="customers" display="menu"/>
+        </div>
+      </th>
+      <th style="width: 15%">
+        <div class="flex align-items-center">
+          Mesero
+          <p-columnFilter field="user.userId" matchMode="in" display="menu" [showMatchModes]="false"
+                          [showOperator]="false" [showAddButton]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="waiters" placeholder="Cualquiera"
+                             (onChange)="filter($event.value)" optionLabel="username" optionValue="userId">
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.username }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th style="width: 10%">
+        <div class="flex align-items-center">
+          Area
+          <p-columnFilter field="area.areaId" matchMode="in" display="menu" [showMatchModes]="false"
+                          [showOperator]="false" [showAddButton]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="areas" placeholder="Cualquiera"
+                             (onChange)="filter($event.value)" optionLabel="name" optionValue="areaId">
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.name }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th style="width: 15%">
+        <div class="flex align-items-center">
+          Estado
+          <p-columnFilter field="tableStatus.tableStatusId" matchMode="in" display="menu" [showMatchModes]="false"
+                          [showOperator]="false" [showAddButton]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="tableStatuses" placeholder="Cualquiera"
+                             (onChange)="filter($event.value)" optionLabel="name" optionValue="tableStatusId">
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.name }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
+        </div>
+      </th>
+      <th style="width: 17%">Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-table>
+    <tr>
+      <td>
+        <span class="p-column-title font-bold">
+          Nombre
+        </span>
+        {{ table.name }}
+      </td>
+      <td>
+        <span class="p-column-title">
+          Autorizado por
+        </span>
+        {{ table.customers }}
+      </td>
+      <td>
+        <span class="p-column-title">
+          Total
+        </span>
+        299$
+      </td>
+      <td>
+        <span class="p-column-title">
+          Mesero
+        </span>
+        <div class="flex gap-2 font-bold">
+            {{ table.user.username }}
+        </div>
+      </td>
+      <td>
+        <span class="p-column-title">
+          Area
+        </span>
+        <div class="flex gap-2">
+            {{ table.area.name }}
+        </div>
+      </td>
+      <td>
+        <span class="p-column-title">
+          Estado
+        </span>
+        <div class="flex gap-2">
+          <p-tag [severity]="getStatusColor(table.tableStatus.name)">
+            {{ table.tableStatus.name }}
+          </p-tag>
+        </div>
+      </td>
+      <td>
+        <span class="p-column-title">
+          Acciones
+        </span>
+
+        <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
+        <p-button (onClick)="menu.toggle($event); setSelectedTable(table)" icon="pi pi-ellipsis-v"/>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Dialog -->
+<p-dialog [header]="currentFormTable.tableId ? 'Editar mesa' : 'Crear mesa'"
+          [modal]="true" [(visible)]="display"
+          (onHide)="closeDialog()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+          styleClass="p-fluid"
+>
+  <span class="p-text-secondary block mb-5">Proporciona la siguiente información</span>
+  <form action="" [formGroup]="tableForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3" autocomplete="off">
+
+    <div class="flex align-items-center gap-3">
+      <label for="name" class="font-semibold w-6rem">Nombre</label>
+      <input
+        formControlName="name"
+        pInputText id="name"
+        class="flex-auto"
+        autocomplete="off"
+        [ngClass]="getControlClass('name')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('name')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('name') }}
+    </span>
+
+    <!-- Area -->
+    <div class="flex align-items-center gap-3">
+      <label class="font-semibold w-6rem">Area</label>
+      <p-dropdown
+        formControlName="areaId"
+        [options]="areas"
+        optionLabel="name"
+        optionValue="areaId"
+        [showClear]="false"
+        [filter]="false"
+        [style]="{ width: '100%' }"
+        [placeholder]="'Seleccione un area'"
+        [ngClass]="getControlClass('areaId')"
+      ></p-dropdown>
+    </div>
+
+    <div class="flex align-items-center gap-3">
+      <label for="customers" class="font-semibold w-6rem">Comensales</label>
+      <p-inputNumber
+        id="customers"
+        formControlName="customers"
+        [showButtons]="true"
+        inputId="customers"
+        [ngClass]="getControlClass('customers')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('customers')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('customers') }}
+    </span>
+
+    <div class="flex justify-content-end gap-2 mt-4">
+      <p-button label="Cancel" severity="secondary" (onClick)="closeDialog()"/>
+      <p-button label="Save" type="submit"/>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog header="Autorización de cobro"
+          [modal]="true" [(visible)]="displayRequestPaymentAuthorization"
+          (onHide)="closeRequestPaymentAuthorizationDialog()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+          styleClass="p-fluid"
+>
+  <!-- Authorization by rfid reader, please scan your rfid card center the text -->
+  <div class="flex flex-column gap-3">
+    <span class="p-text-secondary block mb-5">Por favor, acerque su tarjeta RFID al lector</span>
+    <div class="flex justify-content-center">
+      <p-progressSpinner
+        [style]="{ width: '50px', height: '50px' }"
+        strokeWidth="8"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Imprimir ticket"
+          [modal]="true" [(visible)]="displayWhereToPrintTicket"
+          (onHide)="closeWhereToPrintTicketDialog()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+          styleClass="p-fluid"
+          >
+
+  <div class="flex flex-column gap-3">
+    <span class="p-text-secondary block mb-5">Seleccione el área donde desea imprimir el ticket</span>
+    <div class="grid grid-cols-2 gap-3">
+      <p-button label="Cocina" icon="pi pi-print"/>
+      <p-button label="Bebidas" icon="pi pi-print"/>
+      <p-button label="Postres" icon="pi pi-print"/>
+      <p-button label="caja" icon="pi pi-print"/>
+    </div>
+  </div>
+
+</p-dialog>
+
+
+<!-- TOAST -->
+<p-toast position="top-right"></p-toast>

@@ -89,7 +89,10 @@
             </li>
             <li>
               <a pRipple
-                 class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple">
+                 class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
+                  [routerLinkActive]="['text-primary', 'bg-primary-700']"
+                 routerLink="/tables/list"
+              >
                 <i class="pi pi-th-large mr-2 text-white"></i>
                 <span class="font-medium text-white">Mesas</span>
               </a>
@@ -130,7 +133,7 @@
   <div class="flex flex-column w-full p-3">
     <router-outlet>
       <!-- Open menu icon only visible on mobile -->
-      <div class="bg-gray-50 p-1 flex align-items-center justify-content-between md:hidden">
+      <div class="bg-gray-50 w-full flex align-items-center justify-content-between md:hidden">
         <button
           pButton
           pRipple
