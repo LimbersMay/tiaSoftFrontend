@@ -15,6 +15,8 @@ import {InputTextareaModule} from "primeng/inputtextarea";
 import {DropdownModule} from "primeng/dropdown";
 import {InputNumberModule} from "primeng/inputnumber";
 import {TooltipModule} from "primeng/tooltip";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {MenuModule} from "primeng/menu";
 
 
 
@@ -37,7 +39,9 @@ import {TooltipModule} from "primeng/tooltip";
     InputTextareaModule,
     DropdownModule,
     InputNumberModule,
-    TooltipModule
+    TooltipModule,
+    ProgressSpinnerModule,
+    MenuModule,
   ]
 })
 export class PrimeNgModule { }
