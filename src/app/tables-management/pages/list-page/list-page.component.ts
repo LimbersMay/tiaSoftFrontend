@@ -91,6 +91,7 @@ export class ListPageComponent implements OnInit {
   }
 
   public setSelectedTable (table: Table) {
+    this.items = this.getMenuItems(table);
     this.selectedTable = table;
   }
 
@@ -199,22 +200,35 @@ export class ListPageComponent implements OnInit {
     });
   }
 
-  public ngOnInit() {
+  // Function to check if the table has been paid
+  public isTablePaid(table: Table): boolean {
+    return table && table.tableStatus.name === TableStatus.Pagado;
+  }
 
-    this.items = [
+// Function to check if the table is waiting for authorization
+  public isTablePendingAuthorization(table: Table): boolean {
+    return table && table.tableStatus.name === TableStatus.PorAutorizar;
+  }
+
+
+  public getMenuItems(table: Table): MenuItem[] {
+    return [
       {
         label: 'Gestión de Mesa',
         items: [
           {
             label: 'Editar Mesa',
             icon: 'pi pi-pencil',
+            // Disabled if table is either paid or pending authorization
+            disabled: this.isTablePaid(table) || this.isTablePendingAuthorization(table),
             command: () => {
-              this.showDialog(this.selectedTable);
+              this.showDialog(table);
             }
           },
           {
             label: 'Visualizar Mesa',
             icon: 'pi pi-eye',
+            // Visualizar mesa siempre está habilitada
           }
         ]
       },
@@ -225,15 +239,19 @@ export class ListPageComponent implements OnInit {
           {
             label: 'Enviar a Caja',
             icon: 'pi pi-send',
+            // Disabled if table is either paid or pending authorization
+            disabled: this.isTablePaid(table) || this.isTablePendingAuthorization(table),
             command: () => {
-              this.sendTableToCashier(this.selectedTable);
+              this.sendTableToCashier(table);
             }
           },
           {
             label: 'Autorizar Cobro',
             icon: 'pi pi-lock',
+            // Disabled if table is paid, enabled if pending authorization
+            disabled: this.isTablePaid(table),
             command: () => {
-              this.showRequestPaymentAuthorizationDialog(this.selectedTable);
+              this.showRequestPaymentAuthorizationDialog(table);
             }
           },
           {
@@ -246,7 +264,10 @@ export class ListPageComponent implements OnInit {
         ]
       }
     ];
+  }
 
+
+  public ngOnInit() {
     // ------------- GET TABLES -------------
     this.tablesService.getTables().subscribe({
       next: (tables: Table[]) => this.tables = tables,
