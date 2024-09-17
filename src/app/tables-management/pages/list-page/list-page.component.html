@@ -194,23 +194,6 @@
       {{ getFieldError('name') }}
     </span>
 
-    <div class="flex align-items-center gap-3">
-      <label for="customers" class="font-semibold w-6rem">Comensales</label>
-      <p-inputNumber
-        id="customers"
-        formControlName="customers"
-        [showButtons]="true"
-        inputId="customers"
-      />
-    </div>
-
-    <span
-      *ngIf="isValidField('customers')"
-      class="p-error align-self-center"
-    >
-      {{ getFieldError('customers') }}
-    </span>
-
     <!-- Area -->
     <div class="flex align-items-center gap-3">
       <label class="font-semibold w-6rem">Area</label>
@@ -223,14 +206,26 @@
         [filter]="false"
         [style]="{ width: '100%' }"
         [placeholder]="'Seleccione un area'"
+        [ngClass]="getControlClass('areaId')"
       ></p-dropdown>
     </div>
 
+    <div class="flex align-items-center gap-3">
+      <label for="customers" class="font-semibold w-6rem">Comensales</label>
+      <p-inputNumber
+        id="customers"
+        formControlName="customers"
+        [showButtons]="true"
+        inputId="customers"
+        [ngClass]="getControlClass('customers')"
+      />
+    </div>
+
     <span
-      *ngIf="isValidField('areaId')"
+      *ngIf="isValidField('customers')"
       class="p-error align-self-center"
     >
-      {{ getFieldError('areaId') }}
+      {{ getFieldError('customers') }}
     </span>
 
     <div class="flex justify-content-end gap-2 mt-4">

@@ -13,6 +13,7 @@ import { TableStatus as ITableStatus } from "../../interfaces/tableStatus.interf
 import {User} from "../../../auth/interfaces/user.interface";
 import {UsersService} from "../../../users-management/services/users.service";
 import {UpdateTableDto} from "../../interfaces/update-table.dto";
+import {TableExistsValidatorService} from "../../validators/table-exists-validator.service";
 
 @Component({
   selector: 'app-list-page',
@@ -40,9 +41,9 @@ export class ListPageComponent implements OnInit {
     userId: [''],
 
     // Visible fields
-    name: ['', Validators.required],
-    customers: [0],
-    areaId: [''],
+    name: ['', {updateOn: 'blur', validators:[Validators.required], asyncValidators: [this.tableValidator]}],
+    customers: [0,[Validators.required, Validators.min(1)]],
+    areaId: ['', Validators.required],
   });
 
   public authorizationForm = this.fb.nonNullable.group({
@@ -63,7 +64,10 @@ export class ListPageComponent implements OnInit {
     private readonly messageService: MessageService,
     private readonly errorService: ErrorService,
     private readonly fb: FormBuilder,
-    private readonly validatorsService: ValidatorsService
+    private readonly validatorsService: ValidatorsService,
+
+    //Validators
+    private readonly tableValidator: TableExistsValidatorService,
   ) {}
 
   // KEYBOARD EVENTS on press Key 'N'
@@ -106,19 +110,19 @@ export class ListPageComponent implements OnInit {
   }
 
   // ------------- DIALOG METHODS -------------
-  public showDialog() {
+  public showDialog(table?: Table): void {
     this.display = true;
 
-    if (!this.selectedTable) {
+    if (!table) {
       this.tableForm.reset();
       return;
     }
 
     this.tableForm.patchValue({
-      tableId: this.selectedTable.tableId,
-      name: this.selectedTable.name,
-      customers: this.selectedTable.customers,
-      areaId: this.selectedTable.area.areaId,
+      tableId: table.tableId,
+      name: table.name,
+      customers: table.customers,
+      areaId: table.area.areaId,
     });
   }
 
@@ -205,7 +209,7 @@ export class ListPageComponent implements OnInit {
             label: 'Editar Mesa',
             icon: 'pi pi-pencil',
             command: () => {
-              this.showDialog();
+              this.showDialog(this.selectedTable);
             }
           },
           {
