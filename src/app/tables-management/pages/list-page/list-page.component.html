@@ -1,24 +1,33 @@
 <!-- Header -->
-<div class="flex flex-row gap-3 align-items-center justify-content-between">
+<div class="flex flex-column gap-3 align-items-center justify-content-between bg-gray-50 p-2 md:flex-row w-full">
   <span class="text-2xl font-bold text-color-secondary">
     Gestion de mesas
   </span>
-  <p-button
-    label="Crear categoria"
-    icon="pi pi-plus"
-    class="p-button-success"
-    (click)="showDialog()"
-  ></p-button>
+  <div class="flex justify-content-between align-items-center gap-3 flex-column md:flex-row">
+    <button
+      pButton
+      label="Crear mesa"
+      icon="pi pi-plus"
+      class="p-button-primary w-full"
+      (click)="showDialog()"
+    ></button>
+
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input type="text" pInputText placeholder="Buscar mesa..."  (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
+    </span>
+  </div>
 </div>
 
 <p-table
+  #dt
   [value]="tables"
   styleClass="p-datatable-striped"
   [scrollable]="true"
   [scrollHeight]="'calc(100vh - 200px)'"
   [paginator]="true"
-  [rows]="10"
-  [globalFilterFields]="['name', 'customers', 'user.name', 'area.name', 'tableStatus.name']"
+  [rows]="5"
+  [globalFilterFields]="['name', 'customers', 'user.username', 'area.name', 'tableStatus.name']"
   responsiveLayout="stack"
 >
   <ng-template pTemplate="header">
@@ -31,7 +40,13 @@
       </th>
       <th style="width: 15%">
         <div class="flex align-items-center">
-          Comensales
+          Autorizado por
+          <p-columnFilter type="numeric" field="customers" display="menu"/>
+        </div>
+      </th>
+      <th style="width: 10%">
+        <div class="flex align-items-center">
+          Total
           <p-columnFilter type="numeric" field="customers" display="menu"/>
         </div>
       </th>
@@ -53,7 +68,7 @@
           </p-columnFilter>
         </div>
       </th>
-      <th style="width: 15%">
+      <th style="width: 10%">
         <div class="flex align-items-center">
           Area
           <p-columnFilter field="area.areaId" matchMode="in" display="menu" [showMatchModes]="false"
@@ -89,28 +104,49 @@
           </p-columnFilter>
         </div>
       </th>
-      <th style="width: 15%">Acciones</th>
+      <th style="width: 17%">Acciones</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-table>
     <tr>
-      <td>{{ table.name }}</td>
-      <td>{{ table.customers }}</td>
       <td>
-        <div class="flex gap-2">
-          <p-tag severity="warning">
+        <span class="p-column-title font-bold">
+          Nombre
+        </span>
+        {{ table.name }}
+      </td>
+      <td>
+        <span class="p-column-title">
+          Autorizado por
+        </span>
+        {{ table.customers }}
+      </td>
+      <td>
+        <span class="p-column-title">
+          Total
+        </span>
+        299$
+      </td>
+      <td>
+        <span class="p-column-title">
+          Mesero
+        </span>
+        <div class="flex gap-2 font-bold">
             {{ table.user.username }}
-          </p-tag>
         </div>
       </td>
       <td>
+        <span class="p-column-title">
+          Area
+        </span>
         <div class="flex gap-2">
-          <p-tag severity="secondary">
             {{ table.area.name }}
-          </p-tag>
         </div>
       </td>
       <td>
+        <span class="p-column-title">
+          Estado
+        </span>
         <div class="flex gap-2">
           <p-tag [severity]="getStatusColor(table.tableStatus.name)">
             {{ table.tableStatus.name }}
@@ -118,43 +154,24 @@
         </div>
       </td>
       <td>
+        <span class="p-column-title">
+          Acciones
+        </span>
 
-        <button
-          pButton
-          icon="pi pi-eye"
-          pTooltip="Ver mesa"
-          class="p-button-secondary mr-2"
-        ></button>
-
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-pencil"
-          pTooltip="Editar mesa"
-          (click)="showDialog(table)"
-          class="p-button-primary mr-2"
-        ></button>
-
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-dollar"
-          pTooltip="Facturar mesa"
-          class="p-button-success"
-        ></button>
+        <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
+        <p-button (onClick)="menu.toggle($event); setSelectedTable(table)" icon="pi pi-ellipsis-v"/>
       </td>
     </tr>
   </ng-template>
 </p-table>
 
 <!-- Dialog -->
-<p-dialog header="Crear mesa"
+<p-dialog [header]="currentFormTable.tableId ? 'Editar mesa' : 'Crear mesa'"
           [modal]="true" [(visible)]="display"
           (onHide)="closeDialog()"
           [dismissableMask]="true"
           [focusOnShow]="false"
+          styleClass="p-fluid"
 >
   <span class="p-text-secondary block mb-5">Proporciona la siguiente información</span>
   <form action="" [formGroup]="tableForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3" autocomplete="off">
@@ -183,7 +200,8 @@
         id="customers"
         formControlName="customers"
         [showButtons]="true"
-        inputId="customers" />
+        inputId="customers"
+      />
     </div>
 
     <span
@@ -221,6 +239,47 @@
     </div>
   </form>
 </p-dialog>
+
+<p-dialog header="Autorización de cobro"
+          [modal]="true" [(visible)]="displayRequestPaymentAuthorization"
+          (onHide)="closeRequestPaymentAuthorizationDialog()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+          styleClass="p-fluid"
+>
+  <!-- Authorization by rfid reader, please scan your rfid card center the text -->
+  <div class="flex flex-column gap-3">
+    <span class="p-text-secondary block mb-5">Por favor, acerque su tarjeta RFID al lector</span>
+    <div class="flex justify-content-center">
+      <p-progressSpinner
+        [style]="{ width: '50px', height: '50px' }"
+        strokeWidth="8"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Imprimir ticket"
+          [modal]="true" [(visible)]="displayWhereToPrintTicket"
+          (onHide)="closeWhereToPrintTicketDialog()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+          styleClass="p-fluid"
+          >
+
+  <div class="flex flex-column gap-3">
+    <span class="p-text-secondary block mb-5">Seleccione el área donde desea imprimir el ticket</span>
+    <div class="grid grid-cols-2 gap-3">
+      <p-button label="Cocina" icon="pi pi-print"/>
+      <p-button label="Bebidas" icon="pi pi-print"/>
+      <p-button label="Postres" icon="pi pi-print"/>
+      <p-button label="caja" icon="pi pi-print"/>
+    </div>
+  </div>
+
+</p-dialog>
+
 
 <!-- TOAST -->
 <p-toast position="top-right"></p-toast>
