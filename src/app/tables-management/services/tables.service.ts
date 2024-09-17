@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {environments} from "../../../../environments/environments";
 import {HttpClient} from "@angular/common/http";
-import {catchError, from, map, Observable, Subject, tap, throwError} from "rxjs";
+import {catchError, from, map, Observable, throwError} from "rxjs";
 import {Table} from "../interfaces/table.interface";
 import {CreateTableDto} from "../interfaces/create-table.dto";
 import {TableStatus} from "../interfaces/tableStatus.interface";
 import {UpdateTableDto} from "../interfaces/update-table.dto";
-import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
+import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,7 @@ export class TablesService {
   ) {
     this.connection = new HubConnectionBuilder()
       .withUrl(`${this.baseUrl}/hubs/table`, {withCredentials: true})
+      .configureLogging(LogLevel.Information)
       .build();
 
     this.connection.start()
@@ -62,18 +63,11 @@ export class TablesService {
   }
 
   public updateTable(table: UpdateTableDto): Observable<void> {
-    console.log(table);
     return from(this.connection.invoke('UpdateTable', table.tableId, table));
   }
 
-  // Checkout table
-  public checkoutTable(tableId: number): Observable<Table> {
-    const url = `${this.baseUrl}/tables/${tableId}/checkout`;
-
-    return this.httpClient.put<Table>(url, {}, {withCredentials: true})
-      .pipe(
-        map(table => table),
-        catchError(error => throwError(() => error))
-      )
+  // Send table to cashier to request authorization
+  public sendTableToCashier(tableId: string): Observable<Table> {
+    return from(this.connection.invoke('SendTableToCashier', tableId));
   }
 }
