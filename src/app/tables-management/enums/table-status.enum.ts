@@ -1,4 +1,5 @@
 export enum TableStatus {
   Activo = 'Activo',
-  Pagado = 'Pagado'
+  Pagado = 'Pagado',
+  PorAutorizar = 'PorAutorizar'
 }

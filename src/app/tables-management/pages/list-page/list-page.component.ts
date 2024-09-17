@@ -102,8 +102,6 @@ export class ListPageComponent implements OnInit {
         return 'success';
       case TableStatus.PorAutorizar:
         return 'warning';
-      case TableStatus.Cancelado:
-        return 'danger';
     }
   }
 
