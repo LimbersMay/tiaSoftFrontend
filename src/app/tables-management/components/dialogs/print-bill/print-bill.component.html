@@ -1,0 +1,19 @@
+<p-dialog header="Imprimir ticket"
+          [modal]="true" [(visible)]="display"
+          (onHide)="onClose()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+          styleClass="p-fluid"
+>
+
+  <div class="flex flex-column gap-3">
+    <span class="p-text-secondary block mb-5">Seleccione el área donde desea imprimir el ticket</span>
+    <div class="grid grid-cols-2 gap-3">
+      <p-button label="Cocina" icon="pi pi-print"/>
+      <p-button label="Bebidas" icon="pi pi-print"/>
+      <p-button label="Postres" icon="pi pi-print"/>
+      <p-button label="caja" icon="pi pi-print"/>
+    </div>
+  </div>
+
+</p-dialog>

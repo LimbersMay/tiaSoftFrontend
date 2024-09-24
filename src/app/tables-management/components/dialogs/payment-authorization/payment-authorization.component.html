@@ -1,0 +1,19 @@
+<p-dialog header="Autorización de cobro"
+          [modal]="true" [(visible)]="display"
+          (onHide)="onClose()"
+          [dismissableMask]="true"
+          [focusOnShow]="false"
+          styleClass="p-fluid"
+>
+  <!-- Authorization by rfid reader, please scan your rfid card center the text -->
+  <div class="flex flex-column gap-3">
+    <span class="p-text-secondary block mb-5">Por favor, acerque su tarjeta RFID al lector</span>
+    <div class="flex justify-content-center">
+      <p-progressSpinner
+        [style]="{ width: '50px', height: '50px' }"
+        strokeWidth="8"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </div>
+  </div>
+</p-dialog>

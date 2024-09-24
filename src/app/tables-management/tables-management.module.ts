@@ -5,11 +5,19 @@ import { TablesManagementRoutingModule } from './tables-management-routing.modul
 import { ListPageComponent } from './pages/list-page/list-page.component';
 import {PrimeNgModule} from "../prime-ng/prime-ng.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { OrdersPageComponent } from './pages/orders-page/orders-page.component';
+import { PaymentAuthorizationComponent } from './components/dialogs/payment-authorization/payment-authorization.component';
+import { PrintBillComponent } from './components/dialogs/print-bill/print-bill.component';
+import { EditTableComponent } from './components/dialogs/edit-table/edit-table.component';
 
 
 @NgModule({
   declarations: [
-    ListPageComponent
+    ListPageComponent,
+    OrdersPageComponent,
+    PaymentAuthorizationComponent,
+    PrintBillComponent,
+    EditTableComponent,
   ],
     imports: [
         CommonModule,
