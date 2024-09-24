@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {AbstractControl, AsyncValidator, ValidationErrors} from "@angular/forms";
 import {environments} from "../../../../environments/environments";
 import {HttpClient} from "@angular/common/http";
-import {distinctUntilChanged, map, Observable, of} from "rxjs";
+import { map, Observable, of} from "rxjs";
 import {Table} from "../interfaces/table.interface";
 
 @Injectable({
