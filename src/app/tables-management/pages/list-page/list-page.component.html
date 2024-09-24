@@ -166,114 +166,25 @@
 </p-table>
 
 <!-- Dialog -->
-<p-dialog [header]="currentFormTable.tableId ? 'Editar mesa' : 'Crear mesa'"
-          [modal]="true" [(visible)]="display"
-          (onHide)="closeDialog()"
-          [dismissableMask]="true"
-          [focusOnShow]="false"
-          styleClass="p-fluid"
->
-  <span class="p-text-secondary block mb-5">Proporciona la siguiente información</span>
-  <form action="" [formGroup]="tableForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3" autocomplete="off">
+<tables-edit-table
+  [display]="display"
+  [table]="selectedTable"
+  [areas]="areas"
+  [onShowDialog]="onShowDialog"
+  (displayChange)="closeDialog($event)"
+/>
 
-    <div class="flex align-items-center gap-3">
-      <label for="name" class="font-semibold w-6rem">Nombre</label>
-      <input
-        formControlName="name"
-        pInputText id="name"
-        class="flex-auto"
-        autocomplete="off"
-        [ngClass]="getControlClass('name')"
-      />
-    </div>
+<tables-payment-authorization
+  [display]="displayRequestPaymentAuthorization"
+  [table]="selectedTable"
+  (displayChange)="closeRequestPaymentAuthorizationDialog($event)"
+  (authorizePayment)="authorizePayment($event)"
+/>
 
-    <span
-      *ngIf="isValidField('name')"
-      class="p-error align-self-center"
-    >
-      {{ getFieldError('name') }}
-    </span>
-
-    <!-- Area -->
-    <div class="flex align-items-center gap-3">
-      <label class="font-semibold w-6rem">Area</label>
-      <p-dropdown
-        formControlName="areaId"
-        [options]="areas"
-        optionLabel="name"
-        optionValue="areaId"
-        [showClear]="false"
-        [filter]="false"
-        [style]="{ width: '100%' }"
-        [placeholder]="'Seleccione un area'"
-        [ngClass]="getControlClass('areaId')"
-      ></p-dropdown>
-    </div>
-
-    <div class="flex align-items-center gap-3">
-      <label for="customers" class="font-semibold w-6rem">Comensales</label>
-      <p-inputNumber
-        id="customers"
-        formControlName="customers"
-        [showButtons]="true"
-        inputId="customers"
-        [ngClass]="getControlClass('customers')"
-      />
-    </div>
-
-    <span
-      *ngIf="isValidField('customers')"
-      class="p-error align-self-center"
-    >
-      {{ getFieldError('customers') }}
-    </span>
-
-    <div class="flex justify-content-end gap-2 mt-4">
-      <p-button label="Cancel" severity="secondary" (onClick)="closeDialog()"/>
-      <p-button label="Save" type="submit"/>
-    </div>
-  </form>
-</p-dialog>
-
-<p-dialog header="Autorización de cobro"
-          [modal]="true" [(visible)]="displayRequestPaymentAuthorization"
-          (onHide)="closeRequestPaymentAuthorizationDialog()"
-          [dismissableMask]="true"
-          [focusOnShow]="false"
-          styleClass="p-fluid"
->
-  <!-- Authorization by rfid reader, please scan your rfid card center the text -->
-  <div class="flex flex-column gap-3">
-    <span class="p-text-secondary block mb-5">Por favor, acerque su tarjeta RFID al lector</span>
-    <div class="flex justify-content-center">
-      <p-progressSpinner
-        [style]="{ width: '50px', height: '50px' }"
-        strokeWidth="8"
-        animationDuration=".5s"
-      ></p-progressSpinner>
-    </div>
-  </div>
-</p-dialog>
-
-<p-dialog header="Imprimir ticket"
-          [modal]="true" [(visible)]="displayWhereToPrintTicket"
-          (onHide)="closeWhereToPrintTicketDialog()"
-          [dismissableMask]="true"
-          [focusOnShow]="false"
-          styleClass="p-fluid"
-          >
-
-  <div class="flex flex-column gap-3">
-    <span class="p-text-secondary block mb-5">Seleccione el área donde desea imprimir el ticket</span>
-    <div class="grid grid-cols-2 gap-3">
-      <p-button label="Cocina" icon="pi pi-print"/>
-      <p-button label="Bebidas" icon="pi pi-print"/>
-      <p-button label="Postres" icon="pi pi-print"/>
-      <p-button label="caja" icon="pi pi-print"/>
-    </div>
-  </div>
-
-</p-dialog>
+<tables-print-bill
+  [display]="displayWhereToPrintTicket"
+  (displayChange)="closeWhereToPrintTicketDialog($event)"
+/>
 
 
 <!-- TOAST -->
