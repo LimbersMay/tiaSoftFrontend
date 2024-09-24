@@ -1,19 +1,15 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
+import {Component, OnInit} from '@angular/core';
 import {MenuItem, MessageService} from "primeng/api";
 import {ErrorService} from "../../../shared/services/error.service";
-import {ValidatorsService} from "../../../shared/services/validators.service";
 import {Table} from "../../interfaces/table.interface";
 import {TablesService} from "../../services/tables.service";
 import {Area} from "../../../areas-management/interfaces/area.interface";
 import {AreasService} from "../../../areas-management/services/areas.service";
-import {CreateTableDto} from "../../interfaces/create-table.dto";
 import {TableStatus} from "../../enums/table-status.enum";
-import { TableStatus as ITableStatus } from "../../interfaces/tableStatus.interface";
+import {TableStatus as ITableStatus} from "../../interfaces/tableStatus.interface";
 import {User} from "../../../auth/interfaces/user.interface";
 import {UsersService} from "../../../users-management/services/users.service";
-import {UpdateTableDto} from "../../interfaces/update-table.dto";
-import {TableExistsValidatorService} from "../../validators/table-exists-validator.service";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-list-page',
@@ -26,77 +22,38 @@ export class ListPageComponent implements OnInit {
   public waiters: User[] = [];
   public tableStatuses: ITableStatus[] = [];
 
-  public display!: boolean;
-  public displayRequestPaymentAuthorization!: boolean;
+  public display: boolean = false;
+  public displayRequestPaymentAuthorization: boolean = false;
   public displayWhereToPrintTicket!: boolean;
 
-  public selectedTable!: Table;
+  public selectedTable: Table | undefined;
+
+  // Events
+  public onShowDialog = new Subject<Table | undefined>();
 
   // p-menu items
   public items: MenuItem[] | undefined;
-
-  public tableForm = this.fb.nonNullable.group({
-    // Hidden fields
-    tableId: [''],
-    userId: [''],
-
-    // Visible fields
-    name: ['', {updateOn: 'blur', validators:[Validators.required], asyncValidators: [this.tableValidator]}],
-    customers: [0,[Validators.required, Validators.min(1)]],
-    areaId: ['', Validators.required],
-  });
-
-  public authorizationForm = this.fb.nonNullable.group({
-    tableId: [''],
-    tableStatus: this.fb.nonNullable.group({
-      tableStatusId: [''],
-      name: [''],
-      description: ['']
-    }),
-  });
 
   constructor(
     // Domain services
     private readonly tablesService: TablesService,
     private readonly areasService: AreasService,
     private readonly usersService: UsersService,
-
     private readonly messageService: MessageService,
     private readonly errorService: ErrorService,
-    private readonly fb: FormBuilder,
-    private readonly validatorsService: ValidatorsService,
-
-    //Validators
-    private readonly tableValidator: TableExistsValidatorService,
-  ) {}
-
-  // KEYBOARD EVENTS on press Key 'N'
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.key === 'n') {
-      const index = this.tables.findIndex(t => t.tableId === this.authorizationForm.value.tableId);
-      const newTable = structuredClone(this.tables[index]);
-
-      if (index === -1) {
-        this.showDialog();
-        return;
-      }
-
-      newTable.tableStatus.name = TableStatus.Pagado;
-      this.tables[index] = newTable;
-
-      this.closeRequestPaymentAuthorizationDialog();
-      this.messageService.add({severity: 'success', summary: 'Mesa pagada', detail: 'Mesa pagada correctamente'});
-    }
+  ) {
   }
 
-  public setSelectedTable (table: Table) {
+  authorizePayment(table: Table) {
+    // Map the list of tables and update the table that has been paid
+    this.tables = this.tables.map(t => t.tableId === table.tableId ? table : t);
+
+    this.messageService.add({ severity: 'success', summary: 'Pago autorizado', detail: 'El pago ha sido autorizado correctamente' });
+  }
+
+  public setSelectedTable(table: Table) {
     this.items = this.getMenuItems(table);
     this.selectedTable = table;
-  }
-
-  public get currentFormTable() {
-    return this.tableForm.value;
   }
 
   public getStatusColor(status: TableStatus) {
@@ -113,85 +70,38 @@ export class ListPageComponent implements OnInit {
   // ------------- DIALOG METHODS -------------
   public showDialog(table?: Table): void {
     this.display = true;
-
-    if (!table) {
-      this.tableForm.reset();
-      return;
-    }
-
-    this.tableForm.patchValue({
-      tableId: table.tableId,
-      name: table.name,
-      customers: table.customers,
-      areaId: table.area.areaId,
-    });
+    this.onShowDialog.next(table);
   }
 
-  public closeDialog(): void {
-    this.display = false;
-    this.tableForm.reset();
+  public closeDialog(event: boolean): void {
+    this.display = event;
   }
 
-  public showRequestPaymentAuthorizationDialog(table: Table) {
+  public showRequestPaymentAuthorizationDialog() {
     this.displayRequestPaymentAuthorization = true;
-
-    this.authorizationForm.patchValue({
-      tableId: table.tableId,
-      tableStatus: table.tableStatus
-    });
   }
 
-  public closeRequestPaymentAuthorizationDialog() {
-    this.displayRequestPaymentAuthorization = false;
-    this.tableForm.reset();
+  public closeRequestPaymentAuthorizationDialog(event: boolean) {
+    this.displayRequestPaymentAuthorization = event;
   }
 
   public showWhereToPrintTicketDialog() {
     this.displayWhereToPrintTicket = true;
   }
 
-  public closeWhereToPrintTicketDialog() {
-    this.displayWhereToPrintTicket = false;
+  public closeWhereToPrintTicketDialog(event: boolean) {
+    this.displayWhereToPrintTicket = event;
   }
 
   // ------------- CRUD METHODS -------------
-  public onSubmit() {
-
-    if (this.tableForm.invalid) {
-      this.tableForm.markAllAsTouched();
-      return;
-    }
-
-    if (!this.currentFormTable.tableId) {
-      return this.tablesService.createTable(this.currentFormTable as CreateTableDto).subscribe({
-        next: () => {
-          this.closeDialog();
-          this.messageService.add({severity: 'success', summary: 'Mesa creada', detail: 'Mesa creada correctamente'});
-        },
-        error: error => {
-          const errorMessage = this.errorService.getErrorMessage(error);
-          this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage});
-        }
-      });
-    }
-
-    // ------------- UPDATE TABLE -------------
-    return this.tablesService.updateTable(this.currentFormTable as UpdateTableDto).subscribe({
-      next: _ => {
-        this.closeDialog();
-        this.messageService.add({severity: 'success', summary: 'Mesa actualizada', detail: 'Mesa actualizada correctamente'});
-      },
-      error: error => {
-        const errorMessage = this.errorService.getErrorMessage(error);
-        this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage});
-      }
-    });
-  }
-
   public sendTableToCashier(table: Table) {
     this.tablesService.sendTableToCashier(table.tableId).subscribe({
       next: _ => {
-        this.messageService.add({severity: 'success', summary: 'Cuenta generada', detail: 'Cuenta generada correctamente'});
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Cuenta generada',
+          detail: 'Cuenta generada correctamente'
+        });
       },
       error: error => {
         const errorMessage = this.errorService.getErrorMessage(error);
@@ -228,11 +138,15 @@ export class ListPageComponent implements OnInit {
           {
             label: 'Visualizar Mesa',
             icon: 'pi pi-eye',
-            // Visualizar mesa siempre está habilitada
+          },
+          {
+            label: 'Cuentas',
+            icon: 'pi pi-list',
+            routerLink: `/tables/${table.tableId}/orders`
           }
         ]
       },
-      { separator: true }, // Separador para dividir los grupos
+      {separator: true}, // Separador para dividir los grupos
       {
         label: 'Acciones de Cobro',
         items: [
@@ -251,7 +165,7 @@ export class ListPageComponent implements OnInit {
             // Disabled if table is paid, enabled if pending authorization
             disabled: this.isTablePaid(table),
             command: () => {
-              this.showRequestPaymentAuthorizationDialog(table);
+              this.showRequestPaymentAuthorizationDialog();
             }
           },
           {
@@ -314,7 +228,7 @@ export class ListPageComponent implements OnInit {
           return;
         }
 
-       // Update table and refresh the whole list
+        // Update table and refresh the whole list
         this.tables = this.tables.map(t => t.tableId === table.tableId ? table : t);
       },
       error: (error: any) => {
@@ -322,18 +236,5 @@ export class ListPageComponent implements OnInit {
         this.messageService.add({severity: 'error', summary: 'Error', detail: errorMessage});
       }
     })
-  }
-
-  // ------------- VALIDATORS METHODS -------------
-  public isValidField(field: string): boolean | null {
-    return this.validatorsService.isValidField(this.tableForm, field);
-  }
-
-  public getFieldError(field: string): string | null {
-    return this.validatorsService.getFieldError(this.tableForm, field);
-  }
-
-  public getControlClass(field: string): string {
-    return this.validatorsService.getControlClass(this.tableForm, field);
   }
 }
