@@ -22,98 +22,30 @@
         </li>
         <li>
           <ul class="list-none p-0 m-0 overflow-hidden">
-            <li>
+            <li *ngFor="let navItem of navItems">
               <a pRipple
                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
-                 routerLink="/dashboard"
+                 [routerLink]="navItem.link"
                  [routerLinkActive]="['text-primary', 'bg-primary-700']"
               >
-                <i class="pi pi-chart-pie mr-2 text-white"></i>
-                <span class="font-medium text-white">Resumen</span>
+                <i class="pi {{ navItem.icon }} mr-2 text-white"></i>
+                <span class="font-medium text-white">{{navItem.title}}</span>
               </a>
             </li>
-            <li>
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
-                routerLink="/users/list"
-                [routerLinkActive]="['text-primary', 'bg-primary-700']"
-              >
-                <i class="pi pi-home mr-2 text-white"></i>
-                <span class="font-medium text-white">Usuarios</span>
-              </a>
-            </li>
-            <li>
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
-                routerLink="/roles/list"
-                [routerLinkActive]="['text-primary', 'bg-primary-700']"
-              >
-                <i class="pi pi-key mr-2 text-white"></i>
-                <span class="font-medium text-white">Roles</span>
-              </a>
-            </li>
-            <li>
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
-                [routerLinkActive]="['text-primary', 'bg-primary-700']"
-                routerLink="/categories/list"
-              >
-                <i class="pi pi-tags mr-2 text-white"></i>
-                <span class="font-medium text-white">Categorías</span>
-              </a>
-            </li>
-            <li>
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
-                [routerLinkActive]="['text-primary', 'bg-primary-700']"
-                routerLink="/products/list"
-              >
-                <i class="pi pi-book mr-2 text-white"></i>
-                <span class="font-medium text-white">Menú</span>
-              </a>
-            </li>
-            <li>
-              <a
-                pRipple
-                class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
-                [routerLinkActive]="['text-primary', 'bg-primary-700']"
-                routerLink="/areas/list"
-              >
-                <i class="pi pi-sitemap mr-2 text-white"></i>
-                <span class="font-medium text-white">Areas</span>
-              </a>
+            <li class="mt-auto">
+              <hr class="border-t border-primary-700 my-3 w-15rem">
             </li>
             <li>
               <a pRipple
                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
-                  [routerLinkActive]="['text-primary', 'bg-primary-700']"
-                 routerLink="/tables/list"
+                 routerLink="/options"
+                 [routerLinkActive]="['text-primary', 'bg-primary-700']"
               >
-                <i class="pi pi-th-large mr-2 text-white"></i>
-                <span class="font-medium text-white">Mesas</span>
-              </a>
-            </li>
-            <li>
-              <a pRipple
-                 class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple">
-                <i class="mr-2 text-white pi pi-money-bill"></i>
-                <span class="font-medium text-white">Cuentas</span>
-                <span class="inline-flex align-items-center justify-content-center ml-auto bg-primary border-circle"
-                      style="min-width: 1.5rem; height: 1.5rem">3</span>
-              </a>
-            </li>
-            <li>
-              <a pRipple
-                 class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple">
                 <i class="pi pi-cog mr-2 text-white"></i>
-                <span class="font-medium text-white">Settings</span>
+                <span class="font-medium text-white">Configuración</span>
               </a>
             </li>
-            <li>
+            <li class="mt-auto">
               <a
                 pRipple
                 class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple"
@@ -130,7 +62,7 @@
   </div>
 
   <!-- MAIN CONTENT -->
-  <div class="flex flex-column w-full p-3">
+  <div class="flex flex-column w-full">
     <router-outlet>
       <!-- Open menu icon only visible on mobile -->
       <div class="bg-gray-50 w-full flex align-items-center justify-content-between md:hidden">
