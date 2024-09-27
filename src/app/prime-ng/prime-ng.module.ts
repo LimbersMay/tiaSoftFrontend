@@ -17,6 +17,7 @@ import {InputNumberModule} from "primeng/inputnumber";
 import {TooltipModule} from "primeng/tooltip";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {MenuModule} from "primeng/menu";
+import {StepsModule} from "primeng/steps";
 
 
 
@@ -42,6 +43,7 @@ import {MenuModule} from "primeng/menu";
     TooltipModule,
     ProgressSpinnerModule,
     MenuModule,
+    StepsModule
   ]
 })
 export class PrimeNgModule { }
