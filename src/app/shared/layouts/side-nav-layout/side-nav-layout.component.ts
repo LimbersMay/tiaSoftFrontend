@@ -1,15 +1,24 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../auth/services/auth.service";
-import {Router} from "@angular/router";
+import {Params, Router} from "@angular/router";
+
+export interface NavItem {
+  title: string;
+  icon: string;
+  link: string;
+  queryParams?: Params;
+}
 
 @Component({
   selector: 'shared-side-nav-layout',
   templateUrl: './side-nav-layout.component.html',
   styles: ``
 })
-export class SideNavLayoutComponent {
+export class SideNavLayoutComponent implements OnInit {
 
   public showNavBar = false;
+
+  public navItems: NavItem[] = [];
 
   constructor(
     private readonly authService: AuthService,
@@ -29,5 +38,74 @@ export class SideNavLayoutComponent {
 
   toggleNavBar() {
     this.showNavBar = !this.showNavBar;
+  }
+
+  public ngOnInit() {
+    const adminPrefix = '';
+    const staffPrefix = 'staff';
+
+    const adminNavItems = [
+      {
+        title: 'Resumen',
+        icon: 'pi-chart-pie',
+        link: `${adminPrefix}/dashboard`
+      },
+      {
+        title: 'Usuarios',
+        icon: 'pi-users',
+        link: `${adminPrefix}/users/list`
+      },
+      {
+        title: 'Roles',
+        icon: 'pi-key',
+        link: `${adminPrefix}/roles/list`
+      },
+      {
+        title: 'Categorias',
+        icon: 'pi-tags',
+        link: `${adminPrefix}/categories/list`
+      },
+      {
+        title: 'Menu',
+        icon: 'pi-book',
+        link: `${adminPrefix}/products/list`
+      },
+      {
+        title: 'Areas',
+        icon: 'pi-sitemap',
+        link: `${adminPrefix}/areas/list`
+      },
+      {
+        title: 'Mesas',
+        icon: 'pi-th-large',
+        link: `${adminPrefix}/tables/list`
+      },
+      {
+        title: 'Cuentas',
+        icon: 'pi-money-bill',
+        link: `${adminPrefix}/accounts/list`
+      }
+    ];
+
+    const staffNavItems: NavItem[] = [
+      {
+        title: 'Menu',
+        icon: 'pi-book',
+        link: `/${staffPrefix}/menu/list`,
+        queryParams: {'category': 'todo'}
+      },
+      {
+        title: 'Mesas',
+        icon: 'pi-th-large',
+        link: `/${staffPrefix}/tables/list`
+      },
+      {
+        title: 'Ordenes',
+        icon: 'pi-shopping-cart',
+        link: `${staffPrefix}/orders/list`
+      }
+    ]
+
+    this.navItems = staffNavItems;
   }
 }
