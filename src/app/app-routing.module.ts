@@ -45,6 +45,16 @@ const routes: Routes = [
     loadChildren: () => import('./tables-management/tables-management.module').then(m => m.TablesManagementModule)
   },
   {
+    path: 'orders',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./orders-management/orders-management.module').then(m => m.OrdersManagementModule)
+  },
+  {
+    path: 'staff',
+    canActivate: [isAuthenticatedGuard],
+    loadChildren: () => import('./staff/staff.module').then(m => m.StaffModule)
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
