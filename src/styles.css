@@ -3,4 +3,16 @@
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
+@font-face {
+  font-family: 'Lato';
+  src: url('assets/fonts/Lato/Lato-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+}
+
 html, body { padding: 0; margin: 0;}
