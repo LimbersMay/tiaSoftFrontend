@@ -33,7 +33,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              "src/web.config"
             ],
             "styles": [
               "src/styles.css",
@@ -46,8 +47,8 @@
           "configurations": {
             "production": {
               "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
+                "replace": "environments/environments.ts",
+                "with": "environments/environments.prod.ts"
               }],
               "budgets": [
                 {
