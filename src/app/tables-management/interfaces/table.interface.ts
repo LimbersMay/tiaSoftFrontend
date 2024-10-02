@@ -5,7 +5,6 @@ import {TableStatus} from "./tableStatus.interface";
 export interface Table {
   tableId: string;
   name: string;
-  customers: number;
   user: User
   area: Area
   tableStatus: TableStatus;

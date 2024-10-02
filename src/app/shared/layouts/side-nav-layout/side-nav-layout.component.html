@@ -26,6 +26,7 @@
               <a pRipple
                  class="flex align-items-center cursor-pointer p-3 border-round text-700 hover:bg-primary-700 transition-duration-150 transition-colors p-ripple no-underline"
                  [routerLink]="navItem.link"
+                 (click)="toggleNavBar()"
                  [routerLinkActive]="['text-primary', 'bg-primary-700']"
               >
                 <i class="pi {{ navItem.icon }} mr-2 text-white"></i>
@@ -65,15 +66,20 @@
   <div class="flex flex-column w-full">
     <router-outlet>
       <!-- Open menu icon only visible on mobile -->
-      <div class="bg-gray-50 w-full flex align-items-center justify-content-between md:hidden">
+      <div class="w-full flex align-items-center md:hidden justify-content-start gap-2 p-3 bg-gray-50">
         <button
           pButton
           pRipple
           type="button"
-          icon="pi pi-bars"
-          class="p-button-rounded p-button-text p-button-sm"
+          [text]="true"
           (click)="toggleNavBar()"
-        ></button>
+        >
+          <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <span class="text-700 text-lg">
+          {{ currentUser?.username}}
+        </span>
       </div>
 
     </router-outlet>

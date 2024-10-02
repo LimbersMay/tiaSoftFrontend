@@ -1,4 +1,3 @@
-
-export const environments= {
-  baseURL: 'http://localhost:5226/api'
-}
+export const environments = {
+  baseURL: 'http://192.168.0.19/api'
+};

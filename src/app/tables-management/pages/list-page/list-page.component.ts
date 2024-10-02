@@ -17,19 +17,25 @@ import {Subject} from "rxjs";
   styles: ``
 })
 export class ListPageComponent implements OnInit {
+
   public tables: Table[] = [];
+  public expandedRows = {};
+
+
   public areas: Area[] = [];
   public waiters: User[] = [];
   public tableStatuses: ITableStatus[] = [];
 
   public display: boolean = false;
   public displayRequestPaymentAuthorization: boolean = false;
-  public displayWhereToPrintTicket!: boolean;
+  public displayWhereToPrintTicket: boolean = false;
+  public displayCreateAccount: boolean = false;
 
   public selectedTable: Table | undefined;
 
   // Events
   public onShowDialog = new Subject<Table | undefined>();
+  public onShowCreateOrderDialog = new Subject<Table | undefined>();
 
   // p-menu items
   public items: MenuItem[] | undefined;
@@ -93,6 +99,15 @@ export class ListPageComponent implements OnInit {
     this.displayWhereToPrintTicket = event;
   }
 
+  public showCreateOrderDialog() {
+    this.displayCreateAccount = true;
+    this.onShowCreateOrderDialog.next(this.selectedTable);
+  }
+
+  public closeCreateOrderDialog(event: boolean) {
+    this.displayCreateAccount = event;
+  }
+
   // ------------- CRUD METHODS -------------
   public sendTableToCashier(table: Table) {
     this.tablesService.sendTableToCashier(table.tableId).subscribe({
@@ -136,13 +151,13 @@ export class ListPageComponent implements OnInit {
             }
           },
           {
-            label: 'Visualizar Mesa',
-            icon: 'pi pi-eye',
-          },
-          {
-            label: 'Cuentas',
-            icon: 'pi pi-list',
-            routerLink: `/tables/${table.tableId}/orders`
+            label: 'Crear orden',
+            icon: 'pi pi-plus',
+            // Disabled if table is either paid or pending authorization
+            disabled: this.isTablePaid(table) || this.isTablePendingAuthorization(table),
+            command: () => {
+              this.showCreateOrderDialog();
+            }
           }
         ]
       },

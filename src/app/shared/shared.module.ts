@@ -10,15 +10,15 @@ import {NgClass, NgForOf} from "@angular/common";
   declarations: [
     SideNavLayoutComponent
   ],
-    imports: [
-        RouterOutlet,
-        RouterLink,
-        PrimeNgModule,
-        StyleClassModule,
-        RouterLinkActive,
-        NgClass,
-        NgForOf
-    ],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    PrimeNgModule,
+    StyleClassModule,
+    RouterLinkActive,
+    NgClass,
+    NgForOf
+  ],
   exports: [
     SideNavLayoutComponent
   ]

@@ -5,7 +5,7 @@ import {
   OnDestroy, OnInit,
   Output,
 } from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, Validators} from "@angular/forms";
 import {TableExistsValidatorService} from "../../../validators/table-exists-validator.service";
 import {CreateTableDto} from "../../../interfaces/create-table.dto";
 import {UpdateTableDto} from "../../../interfaces/update-table.dto";
@@ -43,7 +43,6 @@ export class EditTableComponent implements OnDestroy, OnInit {
       validators: [Validators.required],
       asyncValidators: [(control: AbstractControl) => this.tableValidator.validate(control, this.table?.name)]
     }],
-    customers: [0, [Validators.required, Validators.min(1)]],
     areaId: ['', Validators.required],
   });
 
@@ -132,7 +131,6 @@ export class EditTableComponent implements OnDestroy, OnInit {
         tableId: value.tableId,
         userId: value.user.userId,
         name: value.name,
-        customers: value.customers,
         areaId: value.area.areaId
       });
     })

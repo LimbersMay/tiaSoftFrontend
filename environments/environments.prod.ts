@@ -1,4 +1,3 @@
-
-export const environments= {
-  baseURL: 'https://railway.app-heroes:3000'
-}
+export const environments = {
+  baseURL: 'http://192.168.0.19/api'
+};
