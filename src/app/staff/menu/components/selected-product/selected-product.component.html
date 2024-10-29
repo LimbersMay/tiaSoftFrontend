@@ -1,0 +1,9 @@
+<ng-container *ngIf="display">
+  <div class="flex justify-content-between align-items-center gap-3">
+    <img [src]="$any(product.imageUrl) | serverImageUrl" [alt]="product.name" class="w-3rem h-3rem border-round-2xl shadow-1"/>
+    <div class="flex-1">
+      <span class="text-600 text-md">{{ product.name }}</span>
+    </div>
+  </div>
+  <span class="text-md font-semibold">{{ product.price | number: '1.0' }} $</span>
+</ng-container>
