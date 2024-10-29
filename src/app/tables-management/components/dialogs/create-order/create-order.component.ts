@@ -120,17 +120,6 @@ export class CreateOrderComponent implements OnDestroy, OnInit {
       }
     });
 
-    this.bills = [
-      {
-        billId: "1",
-        name: "Cuenta 1"
-      },
-      {
-        billId: "2",
-        name: "Cuenta 2"
-      }
-    ]
-
     this.items = [
       {
         label: "General",

@@ -19,8 +19,6 @@ import {Subject} from "rxjs";
 export class ListPageComponent implements OnInit {
 
   public tables: Table[] = [];
-  public expandedRows = {};
-
 
   public areas: Area[] = [];
   public waiters: User[] = [];
@@ -99,11 +97,6 @@ export class ListPageComponent implements OnInit {
     this.displayWhereToPrintTicket = event;
   }
 
-  public showCreateOrderDialog() {
-    this.displayCreateAccount = true;
-    this.onShowCreateOrderDialog.next(this.selectedTable);
-  }
-
   public closeCreateOrderDialog(event: boolean) {
     this.displayCreateAccount = event;
   }
@@ -148,15 +141,6 @@ export class ListPageComponent implements OnInit {
             disabled: this.isTablePaid(table) || this.isTablePendingAuthorization(table),
             command: () => {
               this.showDialog(table);
-            }
-          },
-          {
-            label: 'Crear orden',
-            icon: 'pi pi-plus',
-            // Disabled if table is either paid or pending authorization
-            disabled: this.isTablePaid(table) || this.isTablePendingAuthorization(table),
-            command: () => {
-              this.showCreateOrderDialog();
             }
           }
         ]

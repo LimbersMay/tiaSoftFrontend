@@ -8,18 +8,20 @@ import {DropdownModule} from "primeng/dropdown";
 import {InputTextModule} from "primeng/inputtext";
 import {PrimeNgModule} from "../../prime-ng/prime-ng.module";
 import {SpeedDialModule} from "primeng/speeddial";
+import {TablesManagementModule} from "../../tables-management/tables-management.module";
 
 
 @NgModule({
   declarations: [
     ListPageComponent
   ],
-  imports: [
-    CommonModule,
-    TablesRoutingModule,
-    ButtonDirective,
-    PrimeNgModule,
-    SpeedDialModule
-  ]
+    imports: [
+        CommonModule,
+        TablesRoutingModule,
+        ButtonDirective,
+        PrimeNgModule,
+        SpeedDialModule,
+        TablesManagementModule
+    ]
 })
 export class TablesModule { }

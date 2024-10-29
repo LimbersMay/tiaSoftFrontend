@@ -90,9 +90,9 @@
       <td>{{ product.description }}</td>
       <td>
         <img
-          [src]="product.imageUrl"
+          [src]="product.imageUrl | serverImageUrl"
           alt="product image"
-          class="w-6 h-6"
+          class="w-6 h-6 max-w-6 max-h-6"
         />
       </td>
       <td>{{ product.category }}</td>
@@ -123,7 +123,7 @@
           (onHide)="closeDialog()"
           [dismissableMask]="true"
           [focusOnShow]="false"
->
+          class="p-fluid">
   <span class="p-text-secondary block mb-5">Proporciona la siguiente información</span>
   <form action="" [formGroup]="productForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3" autocomplete="off">
 
@@ -227,12 +227,15 @@
     </span>
 
     <div class="flex align-items-center gap-3">
-      <label for="image" class="font-semibold w-6rem">Imagen</label>
-      <input
-        pInputText
-        id="image"
-        class="flex-auto"
-        formControlName="imageUrl"
+      <label for="description" class="font-semibold w-6rem">Imagen</label>
+      <p-fileUpload
+        mode="basic"
+        chooseLabel="Seleccionar imagen"
+        chooseIcon="pi pi-upload"
+        name="demo[]"
+        accept="image/*"
+        maxFileSize="1000000"
+        #fileUpload
       />
     </div>
 

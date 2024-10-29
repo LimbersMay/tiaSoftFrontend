@@ -89,12 +89,6 @@ export class SideNavLayoutComponent implements OnInit {
 
     const staffNavItems: NavItem[] = [
       {
-        title: 'Menu',
-        icon: 'pi-book',
-        link: `/${staffPrefix}/menu/list`,
-        queryParams: {'category': 'todo'}
-      },
-      {
         title: 'Mesas',
         icon: 'pi-th-large',
         link: `/${staffPrefix}/tables/list`

@@ -11,6 +11,7 @@
   </div>
 
   <button
+    (click)="showEditTableDialog()"
     pButton
     class="p-button p-component p-button-secondary border-round-2xl">
     Crear mesa
@@ -23,9 +24,29 @@
     class="p-3 flex flex-column border-round-2xl border-1 border-300 align-items-center justify-content-center cursor-pointer p-button p-component"
     style="width: 5rem; height: 6rem;"
     routerLink="/staff/menu/list"
-    [queryParams]="{table: table.tableId}"
+    [queryParams]="{tableId: table.tableId}"
+    (contextmenu)="onContextMenu($event, table)"
+    [ngClass]="getTableStatusClass(table)"
   >
     <i class="fa-solid fa-utensils text-lg"></i>
     <p class="text-center text-sm">{{ table.name }}</p>
   </div>
+
+  <p-contextMenu #cm [model]="contextMenuItems"></p-contextMenu>
 </div>
+
+<!-- Dialog -->
+<tables-edit-table
+  [display]="showEditTable"
+  [table]="selectedTable"
+  [areas]="areas"
+  [onShowDialog]="onShowDialog"
+  (displayChange)="closeEditTableDialog()"
+/>
+
+<tables-print-bill
+  [display]="showWhereToPrintTicket"
+  (displayChange)="closeWhereToPrintTicketDialog($event)"
+/>
+
+<p-toast position="top-right"></p-toast>

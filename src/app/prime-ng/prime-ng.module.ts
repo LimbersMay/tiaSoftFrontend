@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {InputTextModule} from "primeng/inputtext";
+import {InputText, InputTextModule} from "primeng/inputtext";
 import {ButtonModule} from "primeng/button";
 import {RippleModule} from "primeng/ripple";
 import {TableModule} from "primeng/table";
@@ -18,6 +18,7 @@ import {TooltipModule} from "primeng/tooltip";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {MenuModule} from "primeng/menu";
 import {StepsModule} from "primeng/steps";
+import {ContextMenuModule} from "primeng/contextmenu";
 
 
 
@@ -43,7 +44,8 @@ import {StepsModule} from "primeng/steps";
     TooltipModule,
     ProgressSpinnerModule,
     MenuModule,
-    StepsModule
+    StepsModule,
+    ContextMenuModule
   ]
 })
 export class PrimeNgModule { }

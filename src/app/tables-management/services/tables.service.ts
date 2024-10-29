@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {environments} from "../../../../environments/environments";
 import {HttpClient} from "@angular/common/http";
-import {catchError, from, map, Observable, throwError} from "rxjs";
+import {catchError, from, map, Observable, tap, throwError} from "rxjs";
 import {Table} from "../interfaces/table.interface";
 import {CreateTableDto} from "../interfaces/create-table.dto";
 import {TableStatus} from "../interfaces/tableStatus.interface";
 import {UpdateTableDto} from "../interfaces/update-table.dto";
 import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
+import {Bill} from "../interfaces/bill.interface";
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +30,28 @@ export class TablesService {
       .catch((error) => console.log('Error while establishing connection: ' + error));
   }
 
+  public getTableById(tableId: string): Observable<Table> {
+    const url = `${this.baseUrl}/tables/${tableId}`;
+
+    return this.httpClient.get<Table>(url, {withCredentials: true})
+      .pipe(
+        map(table => table),
+        catchError(error => throwError(() => error))
+      )
+  }
+
   public getTables(): Observable<Table[]> {
-    const url = `${this.baseUrl}/tables`;
+    const url = `${this.baseUrl}/tables/all`;
+
+    return this.httpClient.get<Table[]>(url, {withCredentials: true})
+      .pipe(
+        map(tables => tables),
+        catchError(error => throwError(() => error))
+      )
+  }
+
+  public getOnlyActiveAndNotPaidTables(): Observable<Table[]> {
+    const url = `${this.baseUrl}/tables/activeAndNotPaid`;
 
     return this.httpClient.get<Table[]>(url, {withCredentials: true})
       .pipe(
@@ -46,7 +67,6 @@ export class TablesService {
   public onReceiveTable(): Observable<Table> {
     return new Observable<Table>((observer) => {
       this.connection.on('ReceiveTable', (table: Table) => {
-        console.log(table);
         observer.next(table);
       });
     })

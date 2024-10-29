@@ -70,6 +70,7 @@ export class EditTableComponent implements OnDestroy, OnInit {
   }
 
   public onSubmit() {
+    console.log(this.tableForm.value);
 
     if (this.tableForm.invalid) {
       this.tableForm.markAllAsTouched();

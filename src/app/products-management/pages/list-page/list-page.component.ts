@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ProductsService} from "../../services/products.service";
 import {Product} from "../../interfaces/product.interface";
 import {FormBuilder, Validators} from "@angular/forms";
@@ -6,6 +6,9 @@ import {ValidatorsService} from "../../../shared/services/validators.service";
 import {Category} from "../../../categories-management/interfaces/category.interface";
 import {CategoriesService} from "../../../categories-management/services/categories.service";
 import {MessageService} from "primeng/api";
+import {FileUpload} from "primeng/fileupload";
+import {environments} from "../../../../../environments/environments";
+import {ErrorService} from "../../../shared/services/error.service";
 
 @Component({
   selector: 'app-list-page',
@@ -17,6 +20,8 @@ export class ListPageComponent implements OnInit {
   public products: Product[] = [];
   public categories: Category[] = [];
   public display: boolean = false;
+
+  @ViewChild('fileUpload') fileInput!: FileUpload;
 
   public productForm = this.fb.nonNullable.group({
     productId: [''],
@@ -33,7 +38,8 @@ export class ListPageComponent implements OnInit {
     private readonly categoriesService: CategoriesService,
     private readonly fb: FormBuilder,
     private readonly validatorsService: ValidatorsService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly errorService: ErrorService
   ) {}
 
   public showDialog(product?: Product): void {
@@ -86,27 +92,71 @@ export class ListPageComponent implements OnInit {
             summary: 'Producto creado',
             detail: 'Producto creado correctamente'
           });
+
+          // If the file input has files, update the product image
+          if (this.fileInput.hasFiles()) {
+            this.uploadImage(product);
+          }
         },
         error: (err) => {
           console.error(err);
         }
       });
+
+      return;
     }
 
     this.productsService.updateProduct(this.currentProduct).subscribe({
       next: (product: Product) => {
-        const index = this.products.findIndex((p) => p.productId === product.productId);
-        this.products[index] = product;
-        this.closeDialog();
 
+        // Update the product in the products array
+        this.products = this.products.map(p => p.productId === product.productId ? product : p);
+
+        // Show a success message
         this.messageService.add({
           severity: 'success',
           summary: 'Producto actualizado',
           detail: 'Producto actualizado correctamente'
         });
+
+        // If the file input has files, update the product image
+        if (this.fileInput.hasFiles()) {
+          this.uploadImage(product);
+        }
       },
       error: (err) => {
         console.error(err);
+      },
+      complete: () => {
+        this.closeDialog();
+      }
+    })
+  }
+
+  public uploadImage(product: Product) {
+    this.productsService.updateProductImage(product.productId, this.fileInput.files[0]).subscribe({
+      next: (result) => {
+        this.fileInput.clear();
+        // Update the product image URL in the products array
+        this.products = this.products.map(p => {
+          if (p.productId === product.productId) {
+            p.imageUrl = result.imagePath;
+          }
+
+          return p;
+        });
+      },
+      error: (err) => {
+        const errorMessage = this.errorService.getErrorMessage(err);
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error al actualizar la imagen',
+          detail: errorMessage
+        });
+      },
+      complete: () => {
+        this.fileInput.clear();
       }
     });
   }

@@ -13,13 +13,17 @@ import { CreateOrderComponent } from './components/dialogs/create-order/create-o
 
 
 @NgModule({
-  declarations: [
-    ListPageComponent,
-    AccountsPageComponent,
-    PaymentAuthorizationComponent,
-    PrintBillComponent,
+    declarations: [
+        ListPageComponent,
+        AccountsPageComponent,
+        PaymentAuthorizationComponent,
+        PrintBillComponent,
+        EditTableComponent,
+        CreateOrderComponent,
+    ],
+  exports: [
     EditTableComponent,
-    CreateOrderComponent,
+    PrintBillComponent
   ],
     imports: [
         CommonModule,

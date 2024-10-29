@@ -27,16 +27,12 @@
   [scrollHeight]="'calc(100vh - 200px)'"
   [paginator]="true"
   [rows]="5"
-  [globalFilterFields]="['name', 'customers', 'user.username', 'area.name', 'tableStatus.name']"
+  [globalFilterFields]="['name', 'paymentAuthorizedByUser.username', 'user.username', 'area.name', 'tableStatus.name']"
   responsiveLayout="stack"
-  [expandedRowKeys]="expandedRows"
   dataKey="tableId"
 >
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 8%">
-
-      </th>
       <th style="width: 15%">
         <div class="flex align-items-center">
           Nombre
@@ -46,7 +42,19 @@
       <th style="width: 15%">
         <div class="flex align-items-center">
           Autorizado por
-          <p-columnFilter type="numeric" field="customers" display="menu"/>
+          <p-columnFilter field="paymentAuthorizedByUser.userId" matchMode="in" display="menu" [showMatchModes]="false"
+                          [showOperator]="false" [showAddButton]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="waiters" placeholder="Cualquiera"
+                             (onChange)="filter($event.value)" optionLabel="username" optionValue="userId">
+                <ng-template let-option pTemplate="item">
+                  <div class="inline-block vertical-align-middle">
+                    <span class="ml-1 mt-1">{{ option.username }}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </ng-template>
+          </p-columnFilter>
         </div>
       </th>
       <th style="width: 10%">
@@ -112,11 +120,8 @@
       <th style="width: 17%">Acciones</th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-table let-expanded="expanded">
+  <ng-template pTemplate="body" let-table>
     <tr>
-      <td>
-        <p-button type="button" pRipple [pRowToggler]="table" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
-      </td>
       <td>
         <span class="p-column-title font-bold">
           Nombre
@@ -127,7 +132,7 @@
         <span class="p-column-title">
           Autorizado por
         </span>
-        {{ table.customers }}
+        {{ table.paymentAuthorizedByUser?.username }}
       </td>
       <td>
         <span class="p-column-title">
@@ -168,37 +173,6 @@
 
         <p-menu #menu [model]="items" [popup]="true" appendTo="body"/>
         <p-button (onClick)="menu.toggle($event); setSelectedTable(table)" icon="pi pi-ellipsis-v"/>
-      </td>
-    </tr>
-  </ng-template>
-
-  <ng-template pTemplate="rowexpansion" let-table>
-    <tr>
-      <td colspan="8">
-        <div class="p-3">
-          <p-table [value]="table.area" dataKey="areaId" [scrollable]="true" [scrollHeight]="'200px'">
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 10%">
-                  <div class="flex align
-                  -items-center">
-                    Nombre
-                  </div>
-                </th>
-              </ng-template>
-
-              <ng-template pTemplate="body" let-area>
-                <tr>
-                  <td>
-                    <div class="flex align
-                    -items-center">
-                      hello
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-          </p-table>
-        </div>
       </td>
     </tr>
   </ng-template>
