@@ -42,7 +42,7 @@ export class AppComponent implements OnInit{
         next: () => {
           this.finishedAuthChecking = true;
           const redirectUrl = localStorage.getItem('redirectUrl');
-          this.router.navigate([redirectUrl || '/dashboard']);
+          //this.router.navigate([redirectUrl || '/dashboard']);
         },
         error: () => {
           this.finishedAuthChecking = true;

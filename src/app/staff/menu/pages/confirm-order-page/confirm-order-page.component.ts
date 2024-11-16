@@ -4,7 +4,11 @@ import {TablesService} from "../../../../tables-management/services/tables.servi
 import {ActivatedRoute, Router} from "@angular/router";
 import {BillUI} from "../../../../tables-management/interfaces/bill.interface";
 import {Table} from "../../../../tables-management/interfaces/table.interface";
-import {DropdownChangeEvent} from "primeng/dropdown";
+import {BillsStateService} from "../../services/billsState.service";
+import {FormBuilder} from "@angular/forms";
+import {skip, Subject, takeUntil} from "rxjs";
+import {OrdersService} from "../../../orders/services/orders.service";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-confirm-order-page',
@@ -19,45 +23,32 @@ export class ConfirmOrderPageComponent implements OnInit, OnDestroy {
   public table: Table | undefined;
   public tableId!: string;
 
-  public selectedBill?: BillUI = undefined;
+  // Unsubscribe from all subscriptions
+  private unsubscribe$: Subject<any> = new Subject<any>();
+
+  public billForm = this.fb.nonNullable.group({
+    selectedBill: this.fb.nonNullable.control<BillUI | undefined>(undefined),
+    additionalInfo: this.fb.control<string>(''),
+    customerName: this.fb.control<string>(''),
+  })
 
   constructor(
     private readonly tablesService: TablesService,
+    private readonly billsState: BillsStateService,
+    private readonly ordersService: OrdersService,
+
+    private readonly messageService: MessageService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
   ) {}
 
-  public selectBill(selectedBillId: DropdownChangeEvent) {
-    console.log(this.bills);
+  public get currentSelectedBill(): BillUI | undefined {
+    return this.billForm.value.selectedBill;
+  }
 
-    this.selectedBill = this.bills.find((bill: BillUI) => bill.billId === selectedBillId.value);
-
-    // Change the products with the products of the selected bill
-    // Products array have products and the current bill has his own products
-    // Change the products array with the products of the selected bill
-    // Loop through the products of the selected bill and change the product with the same id in the products array
-    if (!this.selectedBill) {
-      this.productsToProcess = this.getAllProductsInBills();
-      return;
-    }
-
-    this.productsToProcess = this.productsToProcess.map((product: ProductUI) => {
-      const productInBill = this.selectedBill?.items.find((item: ProductUI) => item.productId === product.productId);
-
-      if (productInBill) {
-        return {
-          ...product,
-          isSelected: true,
-          quantity: productInBill.quantity
-        };
-      }
-
-      return {
-        ...product,
-        isSelected: false,
-        quantity: 1
-      };
-    });
+  public selectBill(selectedBill: BillUI) {
+    this.billsState.setSelectedBill(selectedBill);
   }
 
   public getAllProductsInBills(): ProductUI[] {
@@ -83,17 +74,77 @@ export class ConfirmOrderPageComponent implements OnInit, OnDestroy {
   }
 
   public get currentBillTotal(): number {
-    if (!this.selectedBill) return this.totalOfAllBills;
+    if (!this.currentSelectedBill) return this.totalOfAllBills;
 
-    return this.selectedBill.items.reduce((acc: number, item: ProductUI) => acc + item.quantity * item.price, 0);
+    return this.currentSelectedBill.items.reduce((acc: number, item: ProductUI) => acc + item.quantity * item.price, 0);
+  }
+
+  public increaseQuantity(product: ProductUI) {
+    // If there is not a selected bill, select the first one
+    if (!this.currentSelectedBill)
+      this.billsState.setSelectedBill(this.bills[0]);
+
+    this.billsState.addProductToBill(product);
+  }
+
+  public decreaseQuantity(product: ProductUI) {
+    // If there is not a selected bill, select the first one
+    if (!this.currentSelectedBill)
+      this.billsState.setSelectedBill(this.bills[0]);
+
+    this.billsState.removeProductFromBill(product);
+  }
+
+  public onSubmit() {
+    // We only want to process bills that have items
+    const billsToProcess = this.bills.filter(bill => bill.items.length > 0);
+
+    this.ordersService.createOrder({
+      bills: billsToProcess,
+      additionalInfo: this.billForm.value.additionalInfo,
+      customerName: this.billForm.value.customerName,
+      areaId: this.table!.area.areaId
+    }).subscribe({
+      next: () => {
+        localStorage.removeItem('bills');
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Orden creada',
+          detail: 'La orden ha sido creada exitosamente'
+        });
+
+        this.router.navigate(['/staff/tables']);
+      }
+    })
   }
 
   public ngOnInit() {
+    // Get all bills
+    this.billsState.bills$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(bills => this.bills = bills);
+
+    this.billsState.products$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(products => this.productsToProcess = products);
+
+    this.billsState.selectedBill$
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        skip(1) // Skip the first value
+      )
+      .subscribe(selectedBill => {
+      this.billForm.patchValue({selectedBill});
+      this.billsState.setProducts(selectedBill?.items || this.getAllProductsInBills());
+    });
+
     const billsFromLocalStorage = localStorage.getItem('bills');
 
     if (billsFromLocalStorage) {
-      this.bills = JSON.parse(billsFromLocalStorage);
-      this.productsToProcess = this.getAllProductsInBills();
+      const billsParsed: BillUI[] = JSON.parse(billsFromLocalStorage);
+      this.billsState.setBills(billsParsed);
+      this.billsState.setProducts(this.getAllProductsInBills());
     }
 
     // Get current table
@@ -114,11 +165,29 @@ export class ConfirmOrderPageComponent implements OnInit, OnDestroy {
           this.table = table;
         },
       })
-    })
+    });
+
+    // Subscribe onReceiveOrder
+    this.ordersService.onReceiveOrders().subscribe({
+      next: (order) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Orden recibida',
+          detail: 'Se ha recibido una nueva orden'
+        });
+      }
+    });
   }
 
   public ngOnDestroy() {
-    console.log('destroy');
-    //localStorage.removeItem('order');
+    this.unsubscribe$.next(undefined);
+    this.unsubscribe$.complete();
+
+    this.billsState.setBills([]);
+    this.billsState.setSelectedBill(undefined);
+    this.billsState.setProducts([]);
+    this.billForm.reset();
+
+    localStorage.removeItem('bills');
   }
 }

@@ -1,11 +1,11 @@
-<div class="flex bg-gray-50 flex-column gap-2 p-3 md:flex-row justify-content-between items-center border-round-bottom-2xl">
+<div class="flex bg-gray-50 flex-column gap-2 p-3 md:flex-column justify-content-between items-center border-round-bottom-2xl">
     <span class="text-3xl font-bold text-primary">Menú</span>
 
   <div class="relative w-full md:w-auto flex align-items-center gap-2">
     <span class="p-input-icon-left w-full">
       <i class="pi pi-search text-primary"></i>
       <input
-        type="text" pInputText placeholder="Buscar..." class="w-full md:w-auto border-round-2xl"
+        type="text" pInputText placeholder="Buscar..." class="w-full md:w-full border-round-2xl"
         (input)="filterProductsByName($any($event.target).value)"
       />
     </span>
@@ -83,51 +83,56 @@
   <!-- Products -->
   <!-- Lista de productos con diseño más compacto -->
   <div class="w-full flex flex-column gap-2">
-    <ng-container *ngFor="let product of products">
-      <div
-        *ngIf="product.visible && billForm.value.selectedBill"
-        class="flex justify-content-between align-items-center p-3 border-1 border-300 border-round-2xl gap-3"
-        [ngClass]="product.isSelected ? 'border-primary-500 border-2 bg-primary-50' : ''"
-        (click)="selectProduct(product)"
-      >
-        <!-- When the product is not selected -->
-        <ng-container *ngIf="!product.isSelected">
-          <div class="flex justify-content-between align-items-center gap-3">
-            <img [src]="$any(product.imageUrl) | serverImageUrl" [alt]="product.name" class="w-3rem h-3rem border-round-2xl shadow-1"/>
-            <div class="flex-1">
-              <span class="text-600 text-md">{{ product.name }}</span>
+    <p-scrollPanel
+      [style]="{width: '100%', height: 'calc(100vh - 30rem)'}"
+    >
+      <ng-container *ngFor="let product of products">
+        <div
+          *ngIf="product.visible && billForm.value.selectedBill"
+          class="flex justify-content-between align-items-center p-3 border-1 border-300 border-round-2xl gap-3 mt-2"
+          [ngClass]="product.isSelected ? 'border-primary-500 border-2 bg-primary-50' : ''"
+          (click)="selectProduct(product)"
+        >
+          <!-- When the product is not selected -->
+          <ng-container *ngIf="!product.isSelected">
+            <div class="flex justify-content-between align-items-center gap-3">
+              <img [src]="$any(product.imageUrl) | serverImageUrl" [alt]="product.name" class="w-3rem h-3rem border-round-2xl shadow-1"/>
+              <div class="flex-1">
+                <span class="text-600 text-md">{{ product.name }}</span>
+              </div>
             </div>
-          </div>
-          <span class="text-md font-semibold">{{ product.price | number: '1.0' }} $</span>
-        </ng-container>
+            <span class="text-md font-semibold">{{ product.price | number: '1.0' }} $</span>
+          </ng-container>
 
-        <!-- When the product is selected -->
-        <ng-container *ngIf="product.isSelected">
-          <div class="flex justify-content-between align-items-center gap-3">
-            <img [src]="$any(product.imageUrl) | serverImageUrl" [alt]="product.name" class="w-4rem h-4rem border-round-2xl"/>
-            <div class="flex flex-column gap-1">
-              <span class="text-600 text-md">{{ product.name }}</span>
-              <span class="text-md">{{ product.price | number: '1.0' }} $</span>
+          <!-- When the product is selected -->
+          <ng-container *ngIf="product.isSelected">
+            <div class="flex justify-content-between align-items-center gap-3">
+              <img [src]="$any(product.imageUrl) | serverImageUrl" [alt]="product.name" class="w-4rem h-4rem border-round-2xl"/>
+              <div class="flex flex-column gap-1">
+                <span class="text-600 text-md">{{ product.name }}</span>
+                <span class="text-md">{{ product.price | number: '1.0' }} $</span>
+              </div>
             </div>
-          </div>
-          <div class="flex justify-content-between align-items-center gap-3">
-            <button
-              class="p-button p-button-rounded p-button-secondary p-button-outlined w-2rem flex justify-content-center"
-              (click)="decreaseQuantity(product); $event.stopPropagation()"
-            >
-              <i class="pi pi-minus"></i>
-            </button>
-            <span class="font-bold">{{ product.quantity }}</span>
-            <button
-              class="p-button p-button-rounded p-button-secondary p-button-outlined w-2rem flex justify-content-center"
-              (click)="increaseQuantity(product); $event.stopPropagation()"
-            >
-              <i class="pi pi-plus"></i>
-            </button>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
+            <div class="flex justify-content-between align-items-center gap-3">
+              <button
+                class="p-button p-button-rounded p-button-secondary p-button-outlined w-2rem flex justify-content-center"
+                (click)="decreaseQuantity(product); $event.stopPropagation()"
+              >
+                <i class="pi pi-minus"></i>
+              </button>
+              <span class="font-bold">{{ product.quantity }}</span>
+              <button
+                class="p-button p-button-rounded p-button-secondary p-button-outlined w-2rem flex justify-content-center"
+                (click)="increaseQuantity(product); $event.stopPropagation()"
+              >
+                <i class="pi pi-plus"></i>
+              </button>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+
+    </p-scrollPanel>
 
     <!-- IF THERES NO ACCOUNT SELECTED SHOW PLEASE SELECT AN ACCOUNT -->
     <div *ngIf="!billForm.value.selectedBill" class="flex justify-content-center align-items-center gap-2 p-3 border-1 border-300 border-round-2xl">
@@ -165,11 +170,7 @@
 </div>
 
 <menu-create-bill
-  [showCreateBillDialog]="showCreateBillDialog"
-  (displayChange)="closeBillDialog($event)"
-  [onShowDialog]="onShowDialog"
   [tableId]="tableId"
-  (onCreateBill)="newBillCreated($event)"
 />
 
 <p-toast position="top-right"></p-toast>

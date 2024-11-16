@@ -1,0 +1,47 @@
+<div class="flex bg-gray-50 flex-column gap-2 p-3 md:flex-row justify-content-between items-center border-round-bottom-2xl">
+  <span class="text-3xl text-primary">Órdenes</span>
+
+  <form [formGroup]="tableForm">
+    <p-dropdown
+      formControlName="selectedTable"
+      [options]="tables"
+      optionLabel="name"
+      dataKey="tableId"
+      [style]="{width: '100%'}"
+      placeholder="Seleccionar mesa"
+      [filter]="false"
+      (onChange)="selectTable($event.value)"
+      [showClear]="true"
+      [emptyFilterMessage]="'No se encontraron cuentas'"
+    >
+    </p-dropdown>
+  </form>
+</div>
+
+<div class="p-3">
+  <div *ngFor="let order of orders"
+       class="flex align-items-center gap-3 bg-white p-3 mb-3"
+     >
+    <p-button class="flex align-items-center justify-content-center bg-primary border-round-lg">
+      <span class="text-white font-bold text-2xl">{{ order.tableName }}</span>
+    </p-button>
+
+    <div class="flex flex-column justify-content-center gap-2" style="flex-grow: 1;">
+      <div class="font-semibold">{{ order.user.username }}</div>
+      <div class="text-md text-gray-500">{{ order.products.length }} Platillos</div>
+    </div>
+
+    <div class="flex flex-column justify-content-center gap-2">
+      <p-tag
+        [severity]="getSeverity(order.orderStatus.name)"
+             styleClass="text-sm "
+      >
+        {{ order.orderStatus.name }}
+      </p-tag>
+
+      <span class="text-gray-500">
+        Orden #{{ order.orderNumber }}
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import {environments} from "../../../../environments/environments";
 import {HttpClient} from "@angular/common/http";
-import {catchError, from, map, Observable, tap, throwError} from "rxjs";
+import {catchError, from, map, Observable, throwError} from "rxjs";
 import {Table} from "../interfaces/table.interface";
 import {CreateTableDto} from "../interfaces/create-table.dto";
 import {TableStatus} from "../interfaces/tableStatus.interface";
 import {UpdateTableDto} from "../interfaces/update-table.dto";
 import {HubConnection, HubConnectionBuilder, LogLevel} from "@microsoft/signalr";
-import {Bill} from "../interfaces/bill.interface";
 
 @Injectable({
   providedIn: 'root'

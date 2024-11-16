@@ -96,10 +96,10 @@ export class SideNavLayoutComponent implements OnInit {
       {
         title: 'Ordenes',
         icon: 'pi-shopping-cart',
-        link: `${staffPrefix}/orders/list`
+        link: `/${staffPrefix}/orders/list`
       }
     ]
 
-    this.navItems = staffNavItems;
+    this.navItems = adminNavItems;
   }
 }

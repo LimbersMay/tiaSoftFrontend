@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {ValidatorsService} from "../../../../../shared/services/validators.service";
 import {FormBuilder} from "@angular/forms";
 import {Bill} from "../../../../../tables-management/interfaces/bill.interface";
-import {Observable} from "rxjs";
+import {Observable, Subject, takeUntil} from "rxjs";
 import {BillsService} from "../../../../../tables-management/services/bills.service";
+import {BillDialogService} from "../../../services/bill-dialog.service";
 
 @Component({
   selector: 'menu-create-bill',
@@ -13,14 +14,10 @@ import {BillsService} from "../../../../../tables-management/services/bills.serv
 export class CreateBillComponent implements OnInit, OnDestroy {
 
   // Dialog properties
-  @Input({ required: true }) public showCreateBillDialog!: boolean;
+  public showCreateBillDialog!: boolean;
   @Input({ required: true }) public tableId!: string;
 
-  // When the value of the display property changes, the displayChange event is emitted
-  @Output() displayChange = new EventEmitter<boolean>();
-  @Output() public onCreateBill = new EventEmitter<Bill>();
-
-  @Input({required: true}) public onShowDialog!: Observable<Bill | undefined>;
+  private unsubscribe$: Subject<any> = new Subject<any>();
 
   public billForm = this.fb.nonNullable.group({
     billId: [''],
@@ -31,11 +28,12 @@ export class CreateBillComponent implements OnInit, OnDestroy {
   constructor(
     private readonly validatorsService: ValidatorsService,
     private readonly fb: FormBuilder,
-    private readonly billsService: BillsService
+    private readonly billsService: BillsService,
+    private readonly billDialogService: BillDialogService
   ) {}
 
   public closeDialog() {
-    this.displayChange.emit(false);
+    this.billDialogService.showDialog(false);
     this.billForm.reset();
   }
 
@@ -55,8 +53,8 @@ export class CreateBillComponent implements OnInit, OnDestroy {
     if (!this.currentBill.billId) {
       this.billsService.createBill(this.currentBill).subscribe({
         next: (bill: Bill) => {
-          this.displayChange.emit(false);
-          this.onCreateBill.emit(bill);
+          this.billDialogService.showDialog(false);
+          this.billDialogService.setOnCreatedBill(bill);
           this.billForm.reset();
         }
       });
@@ -66,8 +64,8 @@ export class CreateBillComponent implements OnInit, OnDestroy {
 
     this.billsService.updateBill(this.currentBill.billId, this.currentBill.name).subscribe({
       next: (bill: Bill) => {
-        this.displayChange.emit(false);
-        this.onCreateBill.emit(bill);
+        this.billDialogService.showDialog(false);
+        this.billDialogService.setOnCreatedBill(bill);
         this.billForm.reset();
       }
     });
@@ -86,7 +84,19 @@ export class CreateBillComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.onShowDialog.subscribe((bill: Bill | undefined) => {
+    this.billDialogService.showDialog$
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((show: boolean) => {
+      this.showCreateBillDialog = show;
+    });
+
+    this.billDialogService.dialogBill$
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((bill: Bill | undefined) => {
       if (!bill) {
         this.billForm.reset({
           tableId: this.tableId
@@ -103,6 +113,7 @@ export class CreateBillComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.displayChange.unsubscribe();
+    this.unsubscribe$.next(undefined);
+    this.unsubscribe$.complete();
   }
 }

@@ -11,6 +11,7 @@ import { SelectedProductComponent } from './components/selected-product/selected
 import { NotSelectedProductComponent } from './components/not-selected-product/not-selected-product.component';
 import { CreateBillComponent } from './components/dialogs/create-bill/create-bill.component';
 import {DividerModule} from "primeng/divider";
+import {ScrollPanelModule} from "primeng/scrollpanel";
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import {DividerModule} from "primeng/divider";
         ProductsManagementModule,
         ReactiveFormsModule,
         DividerModule,
-        FormsModule
+        FormsModule,
+        ScrollPanelModule
     ]
 })
 export class MenuModule { }
