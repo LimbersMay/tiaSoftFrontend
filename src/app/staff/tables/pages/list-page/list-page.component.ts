@@ -58,6 +58,8 @@ export class ListPageComponent implements OnInit{
     switch (table.tableStatus.name) {
       case TableStatus.PorAutorizar:
         return 'bg-orange-500';
+      case TableStatus.Pagado:
+        return 'bg-green-500';
       default:
         return 'bg-primary-500';
     }
@@ -150,6 +152,7 @@ export class ListPageComponent implements OnInit{
     // ------------- ON RECEIVE TABLE -------------
     this.tablesService.onReceiveTable().subscribe({
       next: (table: Table) => {
+
         const index = this.tables.findIndex(t => t.tableId === table.tableId);
 
         if (index === -1) {

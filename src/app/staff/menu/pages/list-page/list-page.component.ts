@@ -195,7 +195,6 @@ export class ListPageComponent implements OnInit, OnDestroy {
 
     // Get current table
     this.activatedRoute.queryParams
-      .pipe(takeUntil(this.unsubscribe$))
       .subscribe(params => {
       this.category = params['categoryId'];
 
