@@ -1,121 +1,130 @@
 <!-- Header -->
-<div class="flex flex-row gap-3 align-items-center justify-content-between">
-  <span class="text-2xl font-bold text-color-secondary">
-    Gestion del menú
-  </span>
-  <p-button
-    label="Crear producto"
-    icon="pi pi-plus"
-    class="p-button-success"
-    (click)="showDialog()"
-  ></p-button>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <p-button
+              label="Crear producto"
+              icon="pi pi-plus"
+              class="p-button-success"
+              (click)="showDialog()"
+            ></p-button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <p-table
+        [value]="products"
+        styleClass="p-datatable-stripped"
+        responsiveLayout="scroll"
+        [paginator]="true"
+        [rows]="5"
+        [globalFilterFields]="['name, price, isAvailable, description, category']"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Gestión del menú</h5>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="min-width: 12rem">
+              <div class="flex align-items-center">
+                Nombre
+                <p-columnFilter type="text" field="name" display="menu"/>
+              </div>
+            </th>
+            <th style="min-width: 12rem">
+              <div class="flex align-items-center">
+                Precio
+                <p-columnFilter type="numeric" field="price" display="menu"/>
+              </div>
+            </th>
+            <th style="min-width: 12rem">
+              <div class="flex align-items-center">
+                Disponibilidad
+                <p-columnFilter type="boolean" field="isAvailable" display="menu"/>
+              </div>
+            </th>
+            <th style="min-width: 12rem">
+              <div class="flex align-items-center">
+                Descripción
+                <p-columnFilter type="text" field="description" display="menu"/>
+              </div>
+            </th>
+            <th style="min-width: 12rem">
+              <div class="flex align-items-center">
+                Imagen
+                <p-columnFilter type="text" field="image" display="menu"/>
+              </div>
+            </th>
+            <th style="min-width: 12rem">
+
+              <div class="flex align-items-center">
+                Categorías
+                <p-columnFilter field="categoryId" matchMode="in" display="menu" [showMatchModes]="false"
+                                [showOperator]="false" [showAddButton]="false">
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                    <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="categories"
+                                   placeholder="Cualquiera"
+                                   (onChange)="filter($event.value)" optionLabel="name" optionValue="categoryId">
+                      <ng-template let-option pTemplate="item">
+                        <div class="inline-block vertical-align-middle">
+                          <span class="ml-1 mt-1">{{ option.name }}</span>
+                        </div>
+                      </ng-template>
+                    </p-multiSelect>
+                  </ng-template>
+                </p-columnFilter>
+              </div>
+            </th>
+            <th style="min-width: 12rem">
+              Acciones
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>
+              <p-tag
+                [severity]="product.isAvailable ? 'success' : 'danger'"
+                [value]="product.isAvailable ? 'Disponible' : 'No disponible'"
+              >
+              </p-tag>
+            </td>
+            <td>{{ product.description }}</td>
+            <td>
+              <img [src]="product.imageUrl | serverImageUrl" [alt]="product.name" width="100" class="shadow-4" />
+            </td>
+            <td>{{ product.category }}</td>
+            <td>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-pencil"
+                class="p-button-success mr-2"
+                (click)="showDialog(product)"
+              ></button>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-danger"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
 </div>
-
-<p-table
-  [value]="products"
-  styleClass="p-datatable-striped"
-  [scrollable]="true"
-  [scrollHeight]="'calc(100vh - 200px)'"
-  responsiveLayout="stack"
-  [paginator]="true"
-  [rows]="5"
-  [globalFilterFields]="['name, price, isAvailable, description, category']"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th style="width: 15%">
-        <div class="flex align-items-center">
-          Nombre
-          <p-columnFilter type="text" field="name" display="menu"/>
-        </div>
-      </th>
-      <th style="width: 15%">
-        <div class="flex align-items-center">
-          Precio
-          <p-columnFilter type="numeric" field="price" display="menu"/>
-        </div>
-      </th>
-      <th style="width: 15%">
-        <div class="flex align-items-center">
-          Disponibilidad
-          <p-columnFilter type="boolean" field="isAvailable" display="menu"/>
-        </div>
-      </th>
-      <th style="width: 15%">
-        <div class="flex align-items-center">
-          Descripción
-          <p-columnFilter type="text" field="description" display="menu"/>
-        </div>
-      </th>
-      <th style="width: 15%">
-        <div class="flex align-items-center">
-          Imagen
-          <p-columnFilter type="text" field="image" display="menu"/>
-        </div>
-      </th>
-      <th style="width: 15%">
-
-        <div class="flex align-items-center">
-          Categorías
-          <p-columnFilter field="categoryId" matchMode="in" display="menu" [showMatchModes]="false"
-                          [showOperator]="false" [showAddButton]="false">
-            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-              <p-multiSelect [showHeader]="false" [ngModel]="value" [options]="categories" placeholder="Cualquiera"
-                             (onChange)="filter($event.value)" optionLabel="name" optionValue="categoryId">
-                <ng-template let-option pTemplate="item">
-                  <div class="inline-block vertical-align-middle">
-                    <span class="ml-1 mt-1">{{ option.name }}</span>
-                  </div>
-                </ng-template>
-              </p-multiSelect>
-            </ng-template>
-          </p-columnFilter>
-        </div>
-
-      </th>
-      <th>Acciones</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-product>
-    <tr>
-      <td>{{ product.name }}</td>
-      <td>{{ product.price }}</td>
-      <td>
-        <p-tag
-          [severity]="product.isAvailable ? 'success' : 'danger'"
-          [value]="product.isAvailable ? 'Disponible' : 'No disponible'"
-        >
-        </p-tag>
-      </td>
-      <td>{{ product.description }}</td>
-      <td>
-        <img
-          [src]="product.imageUrl | serverImageUrl"
-          alt="product image"
-          class="w-6 h-6 max-w-6 max-h-6"
-        />
-      </td>
-      <td>{{ product.category }}</td>
-      <td>
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-pencil"
-          class="p-button-success mr-2"
-          (click)="showDialog(product)"
-        ></button>
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-trash"
-          class="p-button-danger"
-        ></button>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
 
 <!-- Dialog -->
 <p-dialog [header]="currentProduct.productId ? 'Editar producto' : 'Crear producto'"

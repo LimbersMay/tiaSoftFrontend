@@ -1,37 +1,34 @@
-<!-- Header -->
-<div class="flex flex-row gap-3 align-items-center justify-content-between">
-  <span class="text-2xl font-bold text-color-secondary">
-    Roles del sistema
-  </span>
-</div>
+<div class="grid">
+  <div class="col-12">
+    <div class="card">
+      <h5>
+        Roles del sistema
+      </h5>
 
-<p-table
-  [value]="roles"
-  [tableStyle]="{ 'min-width': '50rem' }"
-  styleClass="p-datatable-striped"
-  [paginator]="true"
-  [rows]="10"
-  [rowsPerPageOptions]="[5, 10, 20]"
-  responsiveLayout="stack"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th style="width: 100%;">Nombre</th>
-    </tr>
-    <tr>
-      <th>
-        <p-columnFilter
-          type="text"
-          field="name"
-          placeholder="Buscar por rol"
-          ariaLabel="Buscar por rol"
-        />
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-role>
-    <tr>
-      <td>{{ role.name }}</td>
-    </tr>
-  </ng-template>
-</p-table>
+      <p-table
+        [value]="roles"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        styleClass="p-datatable-gridlines"
+        [rows]="10"
+        responsiveLayout="stack"
+      >
+        <ng-template pTemplate="header">
+          <tr style="min-width: 12rem">
+            <th>
+              <div class="flex justify-content-between align-items-center">
+                Nombre
+                <p-columnFilter type="text" field="name" display="menu"
+                                placeholder="Buscar por nombre"></p-columnFilter>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-role>
+          <tr>
+            <td>{{ role.name }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

@@ -1,80 +1,80 @@
 <!-- Header -->
-<div class="flex flex-row gap-3 align-items-center justify-content-between">
-  <span class="text-2xl font-bold text-color-secondary">
-    Gestion de Areas
-  </span>
-  <p-button
-    label="Crear categoria"
-    icon="pi pi-plus"
-    class="p-button-success"
-    (click)="showDialog()"
-  ></p-button>
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <p-button
+              label="Crear area"
+              icon="pi pi-plus"
+              class="p-button-success"
+              (click)="showDialog()"
+            ></p-button>
+          </div>
+        </ng-template>
+      </p-toolbar>
+
+      <p-table
+        [value]="areas"
+        styleClass="p-datatable-striped"
+        [scrollable]="true"
+        [scrollHeight]="'calc(100vh - 200px)'"
+        [paginator]="true"
+        [rows]="10"
+        [globalFilterFields]="['name', 'description']"
+        responsiveLayout="stack"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Gestión de áreas</h5>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="min-width: 12rem">
+              <div class="flex align-items-center">
+                Nombre
+                <p-columnFilter type="text" field="name" display="menu" placeholder="Buscar por nombre"/>
+              </div>
+            </th>
+            <th style="min-width: 12rem">
+              <div class="flex align-items-center">
+                Descripción
+                <p-columnFilter type="text" field="description" display="menu" placeholder="Buscar por descripción"/>
+              </div>
+            </th>
+            <th style="min-width: 12rem">Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-area>
+          <tr>
+            <td>{{ area.name }}</td>
+            <td>{{ area.description }}</td>
+            <td>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-pencil"
+                (click)="showDialog(area)"
+                class="p-button-success mr-2"
+              ></button>
+              <button
+                pButton
+                pRipple
+                disabled
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-danger"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
 </div>
-
-<p-table
-  [value]="areas"
-  styleClass="p-datatable-striped"
-  [scrollable]="true"
-  [scrollHeight]="'calc(100vh - 200px)'"
-  [paginator]="true"
-  [rows]="10"
-  [globalFilterFields]="['name', 'description']"
-  responsiveLayout="stack"
->
-  <ng-template pTemplate="header">
-    <tr>
-      <th style="width: 40%;">Nombre</th>
-      <th style="width: 40%;">Descripción</th>
-      <th style="width: 20%;">Acciones</th>
-    </tr>
-
-    <tr>
-      <th>
-        <p-columnFilter
-          type="text"
-          field="name"
-          placeholder="Buscar por nombre"
-          ariaLabel="Buscar por nombre"
-        />
-      </th>
-      <th>
-        <p-columnFilter
-          type="text"
-          field="description"
-          placeholder="Buscar por descripción"
-          ariaLabel="Buscar por descripción"
-        />
-      </th>
-      <th>
-
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-area>
-    <tr>
-      <td>{{ area.name }}</td>
-      <td>{{ area.description }}</td>
-      <td>
-        <button
-          pButton
-          pRipple
-          type="button"
-          icon="pi pi-pencil"
-          (click)="showDialog(area)"
-          class="p-button-success mr-2"
-        ></button>
-        <button
-          pButton
-          pRipple
-          disabled
-          type="button"
-          icon="pi pi-trash"
-          class="p-button-danger"
-        ></button>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
 
 <!-- Dialog -->
 <p-dialog [header]="currentArea.areaId ? 'Editar area' : 'Crear area'"

@@ -7,7 +7,7 @@ import {ProductsService} from "../../../../products-management/services/products
 import {ProductUI} from "../../interfaces/product-ui.interface";
 import {TablesService} from "../../../../tables-management/services/tables.service";
 import {Bill, BillUI} from "../../../../tables-management/interfaces/bill.interface";
-import {Subject, takeUntil, tap} from "rxjs";
+import {Subject, takeUntil} from "rxjs";
 import {MessageService} from "primeng/api";
 import {FormBuilder} from "@angular/forms";
 import {BillsStateService} from "../../services/billsState.service";

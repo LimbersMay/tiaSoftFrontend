@@ -19,6 +19,7 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {MenuModule} from "primeng/menu";
 import {StepsModule} from "primeng/steps";
 import {ContextMenuModule} from "primeng/contextmenu";
+import {ToolbarModule} from "primeng/toolbar";
 
 
 
@@ -45,7 +46,8 @@ import {ContextMenuModule} from "primeng/contextmenu";
     ProgressSpinnerModule,
     MenuModule,
     StepsModule,
-    ContextMenuModule
+    ContextMenuModule,
+    ToolbarModule
   ]
 })
 export class PrimeNgModule { }
