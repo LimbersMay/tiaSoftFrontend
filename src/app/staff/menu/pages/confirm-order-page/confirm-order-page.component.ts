@@ -13,7 +13,7 @@ import {MessageService} from "primeng/api";
 @Component({
   selector: 'app-confirm-order-page',
   templateUrl: './confirm-order-page.component.html',
-  styleUrl: "confirm-order-page.component.css",
+  styleUrl: "confirm-order-page.component.scss",
   animations: []
 })
 export class ConfirmOrderPageComponent implements OnInit, OnDestroy {

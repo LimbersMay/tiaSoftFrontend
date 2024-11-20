@@ -47,8 +47,6 @@ export class LayoutService {
 
     private overlayOpen = new Subject<any>();
 
-    configUpdate$ = this.configUpdate.asObservable();
-
     overlayOpen$ = this.overlayOpen.asObservable();
 
     constructor() {

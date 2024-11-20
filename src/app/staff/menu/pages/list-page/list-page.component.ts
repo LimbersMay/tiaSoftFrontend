@@ -22,7 +22,7 @@ export interface Order {
 @Component({
   selector: 'app-list-page-component',
   templateUrl: './list-page.component.html',
-  styleUrls: ['./list-page.component.css'],
+  styleUrls: ['./list-page.component.scss'],
 })
 export class ListPageComponent implements OnInit, OnDestroy {
 

@@ -12,7 +12,7 @@ import {ErrorService} from "../../../../shared/services/error.service";
 @Component({
   selector: 'app-list-page',
   templateUrl: './list-page.component.html',
-  styleUrl: 'list-page.component.css'
+  styleUrl: 'list-page.component.scss'
 })
 export class ListPageComponent implements OnInit{
 
