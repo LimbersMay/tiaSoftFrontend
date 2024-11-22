@@ -1,0 +1,24 @@
+<div class="card cursor-pointer pt-0 pr-0 pl-0">
+  <div>
+    <img
+      [src]="product().imageUrl! | serverImageUrl"
+      [alt]="product().name"
+    />
+  </div>
+
+  <div class="p-3 product-description">
+      <span class="text-gray-800 italic text-overflow-clip">
+        {{ product().name }}
+      </span>
+
+    <p class="text-gray-600 text-sm">
+      {{ product().description }}
+    </p>
+
+    <div>
+      <h3>
+        {{ product().price | currency }}
+      </h3>
+    </div>
+  </div>
+</div>
