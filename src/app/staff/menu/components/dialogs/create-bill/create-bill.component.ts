@@ -1,10 +1,9 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ValidatorsService} from "../../../../../shared/services/validators.service";
 import {FormBuilder} from "@angular/forms";
-import {Bill} from "../../../../../tables-management/interfaces/bill.interface";
-import {Observable, Subject, takeUntil} from "rxjs";
+import {Bill, BillUI} from "../../../../../tables-management/interfaces/bill.interface";
 import {BillsService} from "../../../../../tables-management/services/bills.service";
-import {BillDialogService} from "../../../services/bill-dialog.service";
+import {DialogService, DynamicDialogComponent, DynamicDialogRef} from "primeng/dynamicdialog";
 
 @Component({
   selector: 'menu-create-bill',
@@ -12,29 +11,24 @@ import {BillDialogService} from "../../../services/bill-dialog.service";
   styles: ``
 })
 export class CreateBillComponent implements OnInit, OnDestroy {
-
   // Dialog properties
-  public showCreateBillDialog!: boolean;
-  @Input({ required: true }) public tableId!: string;
-
-  private unsubscribe$: Subject<any> = new Subject<any>();
+  public selectedBill!: BillUI;
+  public instance: DynamicDialogComponent | undefined;
 
   public billForm = this.fb.nonNullable.group({
     billId: [''],
     name: [''],
-    tableId: [this.tableId]
+    tableId: ['']
   });
 
   constructor(
     private readonly validatorsService: ValidatorsService,
     private readonly fb: FormBuilder,
     private readonly billsService: BillsService,
-    private readonly billDialogService: BillDialogService
-  ) {}
-
-  public closeDialog() {
-    this.billDialogService.showDialog(false);
-    this.billForm.reset();
+    public ref: DynamicDialogRef,
+    private dialogService: DialogService
+  ) {
+    this.instance = this.dialogService.getInstance(this.ref);
   }
 
   public get currentBill(): Bill {
@@ -42,8 +36,6 @@ export class CreateBillComponent implements OnInit, OnDestroy {
   }
 
   public onSubmit() {
-
-    console.log(this.billForm.value);
 
     if (this.billForm.invalid) {
       this.billForm.markAllAsTouched();
@@ -53,9 +45,8 @@ export class CreateBillComponent implements OnInit, OnDestroy {
     if (!this.currentBill.billId) {
       this.billsService.createBill(this.currentBill).subscribe({
         next: (bill: Bill) => {
-          this.billDialogService.showDialog(false);
-          this.billDialogService.setOnCreatedBill(bill);
           this.billForm.reset();
+          this.ref.close(bill);
         }
       });
 
@@ -64,9 +55,8 @@ export class CreateBillComponent implements OnInit, OnDestroy {
 
     this.billsService.updateBill(this.currentBill.billId, this.currentBill.name).subscribe({
       next: (bill: Bill) => {
-        this.billDialogService.showDialog(false);
-        this.billDialogService.setOnCreatedBill(bill);
         this.billForm.reset();
+        this.ref.close(bill);
       }
     });
   }
@@ -84,36 +74,35 @@ export class CreateBillComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.billDialogService.showDialog$
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((show: boolean) => {
-      this.showCreateBillDialog = show;
-    });
+    if (this.instance && this.instance.data) {
 
-    this.billDialogService.dialogBill$
-      .pipe(
-        takeUntil(this.unsubscribe$)
-      )
-      .subscribe((bill: Bill | undefined) => {
-      if (!bill) {
-        this.billForm.reset({
-          tableId: this.tableId
-        });
+      // If the bill is new, we need the tableId
+      const tableId = this.instance.data['tableId'];
+      if (!tableId) {
         return;
       }
 
-      this.billForm.patchValue({
-        billId: bill.billId,
-        name: bill.name,
-        tableId: bill.tableId
-      });
-    })
+      this.billForm.patchValue({tableId});
+
+      // If the bill is not new, we need the selectedBill
+      const selectedBill = this.instance.data['selectedBill'];
+      if (!selectedBill) {
+        return;
+      }
+
+      // Retrieve the selected bill from the dialog data
+      this.selectedBill = selectedBill;
+      this.billForm.patchValue(this.selectedBill);
+    }
   }
 
-  public ngOnDestroy() {
-    this.unsubscribe$.next(undefined);
-    this.unsubscribe$.complete();
+  close() {
+    this.ref.close();
+  }
+
+  ngOnDestroy() {
+    if (this.ref) {
+      this.ref.close();
+    }
   }
 }
