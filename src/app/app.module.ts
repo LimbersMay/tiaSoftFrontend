@@ -4,12 +4,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {SharedModule} from "./shared/shared.module";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withInterceptors} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MessageService} from "primeng/api";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {ToastModule} from "primeng/toast";
 import {AppLayoutModule} from "./shared/layout/app.layout.module";
+import {DialogService} from "primeng/dynamicdialog";
+import {serverErrorInterceptor} from "./shared/interceptors/server-error.interceptor";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,10 @@ import {AppLayoutModule} from "./shared/layout/app.layout.module";
         }),
         ToastModule
     ],
-  providers: [MessageService],
+  providers: [
+    MessageService, DialogService,
+    provideHttpClient(withInterceptors([serverErrorInterceptor]))
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
