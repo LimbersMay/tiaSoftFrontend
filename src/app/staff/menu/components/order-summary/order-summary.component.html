@@ -1,0 +1,131 @@
+<div class="card order-summary align-items-center hidden md:flex md:flex-column">
+  <h4 class="align-self-start">
+    Información adicional
+  </h4>
+
+  <input
+    type="text"
+    pInputText
+    class="w-full"
+    placeholder="Nombre del cliente"
+  />
+
+  <div class="flex flex-row gap-2 w-full">
+    <p-dropdown
+      [options]="tables()"
+      [(ngModel)]="selectedTable"
+      placeholder="Elige una mesa"
+      styleClass="w-full"
+      optionLabel="name"
+      dataKey="tableId"
+      (onChange)="onSelectTable($event.value)"
+      class="w-full mt-3"
+    >
+      <ng-template pTemplate="selectedItem">
+        {{ selectedTable()?.name }}
+      </ng-template>
+
+      <ng-template let-table pTemplate="item">
+        <div class="flex justify-content-between">
+          <span>{{ table.name }}</span>
+        </div>
+      </ng-template>
+    </p-dropdown>
+
+    <!-- New Table button -->
+    <button
+      pButton
+      pRipple
+      icon="pi pi-plus"
+      class="max-w-30rem mt-3"
+      pTooltip="Agregar mesa"
+      tooltipPosition="left"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      icon="pi pi-pencil"
+      class="max-w-30rem mt-3"
+      pTooltip="Editar mesa"
+      tooltipPosition="left"
+    ></button>
+  </div>
+
+  <div class="flex flex-row gap-2 w-full">
+    <p-dropdown
+      [options]="bills()"
+      [disabled]="selectedTable() === null"
+      [(ngModel)]="selectedBill"
+      placeholder="Elige una cuenta"
+      optionLabel="name"
+      (onChange)="onSelectBill($event.value)"
+      dataKey="billId"
+      styleClass="w-full"
+      class="w-full mt-3"
+    >
+    </p-dropdown>
+
+    <!-- New Bill button -->
+    <button
+      pButton
+      pRipple
+      icon="pi pi-plus"
+      class="max-w-30rem mt-3 pointer-events-auto"
+      [pTooltip]="!selectedTable() ? 'Seleccione una mesa' : 'Crear cuenta'"
+      tooltipPosition="left"
+      [disabled]="!selectedTable()"
+      (click)="openCreateBillDialog()"
+    ></button>
+
+    <button
+      pButton
+      pRipple
+      icon="pi pi-pencil"
+      class="max-w-30rem mt-3 pointer-events-auto"
+      [pTooltip]="!selectedBill() ? 'Seleccione una cuenta para editar' : 'Editar cuenta'"
+      tooltipPosition="left"
+      [disabled]="!selectedBill()"
+      (click)="openEditBillDialog()"
+    ></button>
+  </div>
+
+  <p-divider
+    class="w-full"
+  />
+
+  <p-scrollPanel
+    [style]="{ height: 'calc(100vh - 550px)', width: '100%' }"
+    styleClass="w-full"
+    class="w-full"
+  >
+    <div class="flex flex-column gap-4 w-full">
+      <ng-container
+        *ngFor="let product of productsInOrder()"
+      >
+        <menu-order-card
+          [product]="product"
+        />
+      </ng-container>
+    </div>
+  </p-scrollPanel>
+
+  <p-divider
+    class="w-full"
+  />
+
+  <div class="flex flex-column gap-2 w-full">
+    <div class="flex justify-content-between">
+      <span>Subtotal:</span>
+      <span>{{ totalInSelectedBill() | currency }}</span>
+    </div>
+    <div class="flex justify-content-between">
+      <span>Total:</span>
+      <span class="font-bold text-xl">{{ totalOrder() | currency }}</span>
+    </div>
+    <button
+      [disabled]="!selectedTable() || !selectedBill()"
+      [pTooltip]="!selectedTable() || !selectedBill() ? 'Selecciona una mesa y una cuenta' : ''"
+      pButton pRipple label="Enviar Orden" class="w-full pointer-events-auto"></button>
+  </div>
+</div>

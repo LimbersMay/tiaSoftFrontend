@@ -1,0 +1,40 @@
+img {
+  object-fit: cover;
+  width: 8rem;
+}
+
+.product-title {
+  max-height: 3rem;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.product-card {
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.quantity-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-button {
+  background-color: var(--text-color-secondary);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--primary-600);
+  }
+}

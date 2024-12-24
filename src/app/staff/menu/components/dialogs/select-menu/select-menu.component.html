@@ -1,0 +1,66 @@
+<div class="flex align-items-center justify-content-center gap-4 flex-column md:flex-row">
+  <img
+    [src]="selectedProduct.imageUrl! | serverImageUrl" [alt]="selectedProduct.name"
+    class="border-round"
+  >
+
+  <div class="flex flex-column justify-content-between gap-4">
+    <div>
+      <h3 class="mb-1 text-lg">{{ selectedProduct.name | slice:0:25 }}
+        <span *ngIf="selectedProduct && selectedProduct.name.length > 25">...</span>
+      </h3>
+      <p class="mb-1 text-sm">{{ selectedProduct.description | slice:0:25 }}
+        <span *ngIf="selectedProduct && selectedProduct.name.length > 25">...</span>
+      </p>
+      <p class="mb-1 font-bold">{{ selectedProduct.price | currency }}</p>
+    </div>
+
+    <div class="flex align-items-center gap-4">
+      <p-button
+        class="p-button-danger"
+        severity="secondary"
+        icon="pi pi-minus"
+        (onClick)="decrement()"
+      />
+
+      <span class="font-bold text-xl">
+        {{ selectedProduct.quantity }}
+      </span>
+
+      <p-button
+        class="p-button-success"
+        severity="secondary"
+        icon="pi pi-plus"
+        (onClick)="increment()"
+      />
+    </div>
+
+    <div>
+
+      <textarea
+        pInputTextarea
+        type="text"
+        placeholder="Comentarios"
+        class="w-14rem"
+      ></textarea>
+
+      <p-divider class="w-full"/>
+
+      <div class="flex flex-row gap-2">
+        <p-button
+          label="Cancelar"
+          class="p-button-danger"
+          (onClick)="close()"
+          severity="secondary"
+        />
+
+        <p-button
+          label="Añadir"
+          class="p-button-success"
+          severity="primary"
+          (onClick)="addProduct()"
+        />
+      </div>
+    </div>
+  </div>
+</div>

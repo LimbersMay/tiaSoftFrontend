@@ -1,0 +1,14 @@
+<div class="flex" (click)="selectCategoryButton()">
+  <div
+    class="card flex align-items-center justify gap-3 justify-content-center cursor-pointer cat"
+    [ngClass]="{ 'selected': category().isSelected }"
+  >
+    <i
+      class="{{ category().icon }} text-primary fa-xl"
+    >
+    </i>
+    <span class="font-bold">
+        {{ category().name }}
+    </span>
+  </div>
+</div>

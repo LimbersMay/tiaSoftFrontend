@@ -1,0 +1,41 @@
+<div class="flex justify-content-between">
+  <div class="flex flex-column gap-5 max-w-full">
+      <div class="flex gap-2 overflow-scroll">
+        <ng-container
+          *ngFor="let category of categories()"
+        >
+          <menu-category-button
+            [category]="category"
+            (onSelectCategory)="selectCategory($event)"
+          />
+        </ng-container>
+      </div>
+
+    <!-- Menu -->
+    <p-scrollPanel
+      [style]="{ height: 'calc(100vh - 250px)', width: '100%' }"
+    >
+      <div class="flex flex-wrap gap-4 align-items-center justify-content-center md:justify-content-start  ">
+        <ng-container
+          *ngFor="let product of products()"
+        >
+          <menu-product-card
+            *ngIf="product.visible"
+            [product]="product"
+            (click)="openMenuDialog(product)"
+          />
+        </ng-container>
+      </div>
+    </p-scrollPanel>
+  </div>
+
+  <!-- Order Summary -->
+  <menu-order-summary />
+
+  <!-- Floating button cart visible only on mobile -->
+<!--  <p-button-->
+<!--    class="p-button-rounded p-button-info p-button-lg fixed bottom-4 right-4"-->
+<!--    icon="pi pi-shopping-cart"-->
+<!--  />-->
+
+</div>

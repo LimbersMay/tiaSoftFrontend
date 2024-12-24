@@ -1,0 +1,23 @@
+<div class="product-card p-4">
+  <div class="flex align-items-center">
+    <img [src]="product().imageUrl! | serverImageUrl" alt="Product Image" class="mr-3 rounded-full" />
+    <div class="flex flex-column">
+      <div class="product-title flex flex-column">
+        <span class="font-bold text-xl">{{ product().name }}</span>
+      </div>
+      <span class="text-sm">{{ product().description | slice:0:35 }}...</span>
+      <div class="flex-column justify-content-between">
+        <span class="text-sm">{{product().price | currency }}</span>
+        <div class="quantity-buttons">
+          <button (click)="decreaseQuantity()" pRipple class="quantity-button">
+            <i class="pi pi-minus"></i>
+          </button>
+          <span class="mx-2">{{ product().quantity }}</span>
+          <button (click)="increaseQuantity()" pRipple class="quantity-button">
+            <i class="pi pi-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

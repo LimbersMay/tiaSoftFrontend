@@ -1,0 +1,15 @@
+@import "primeflex/primeflex";
+
+.cat {
+  min-width: 10rem;
+}
+
+.selected {
+  background-color: var(--primary-50);
+  border-color: var(--primary-500);
+  border-width: 2px;
+
+  span {
+    color: var(--primary-500);
+  }
+}
