@@ -1,8 +1,9 @@
-<div class="card cursor-pointer pt-0 pr-0 pl-0">
+<div class="card cursor-pointer pt-0 pr-0 pl-0 ">
   <div>
     <img
       [src]="product().imageUrl! | serverImageUrl"
       [alt]="product().name"
+      class="border-round"
     />
   </div>
 
@@ -16,9 +17,9 @@
     </p>
 
     <div>
-      <h3>
+      <h5>
         {{ product().price | currency }}
-      </h3>
+      </h5>
     </div>
   </div>
 </div>
