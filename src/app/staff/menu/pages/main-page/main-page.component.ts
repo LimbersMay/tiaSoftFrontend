@@ -8,7 +8,6 @@ import {ProductsService} from "../../../../products-management/services/products
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {SelectMenuComponent} from "../../components/dialogs/select-menu/select-menu.component";
 import {ProductsInOrderService} from "../../services/products-in-order.service";
-import {BillUI} from "../../../../tables-management/interfaces/bill.interface";
 
 @Component({
   selector: 'app-main-page',

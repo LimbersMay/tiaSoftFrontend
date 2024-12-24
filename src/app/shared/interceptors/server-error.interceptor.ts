@@ -1,5 +1,5 @@
 import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
-import {catchError, throwError} from "rxjs";
+import {catchError} from "rxjs";
 import {inject} from "@angular/core";
 import {MessageService} from "primeng/api";
 import {ErrorService} from "../services/error.service";

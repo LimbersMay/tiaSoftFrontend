@@ -1,21 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {ListPageComponent} from "./pages/list-page/list-page.component";
-import {ConfirmOrderPageComponent} from "./pages/confirm-order-page/confirm-order-page.component";
+import {MainPageComponent} from "./pages/main-page/main-page.component";
 
 const routes: Routes = [
   {
     path: 'list',
-    component: ListPageComponent,
+    component: MainPageComponent,
     data: {
       routeIdx: 0
-    }
-  },
-  {
-    path: 'process-order',
-    component: ConfirmOrderPageComponent,
-    data: {
-      routeIdx: 1
     }
   },
   {

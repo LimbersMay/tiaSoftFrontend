@@ -2,36 +2,36 @@ import { NgModule } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 
 import { MenuRoutingModule } from './menu-routing.module';
-import { ListPageComponent } from './pages/list-page/list-page.component';
 import {PrimeNgModule} from "../../prime-ng/prime-ng.module";
-import { ConfirmOrderPageComponent } from './pages/confirm-order-page/confirm-order-page.component';
 import {ProductsManagementModule} from "../../products-management/products-management.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { SelectedProductComponent } from './components/selected-product/selected-product.component';
-import { NotSelectedProductComponent } from './components/not-selected-product/not-selected-product.component';
 import { CreateBillComponent } from './components/dialogs/create-bill/create-bill.component';
-import {DividerModule} from "primeng/divider";
-import {ScrollPanelModule} from "primeng/scrollpanel";
+import { MainPageComponent } from './pages/main-page/main-page.component';
+import { CategoryButtonComponent } from './components/category-button/category-button.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
+import { OrderCardComponent } from './components/order-card/order-card.component';
+import { SelectMenuComponent } from './components/dialogs/select-menu/select-menu.component';
+import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
 
 
 @NgModule({
   declarations: [
-    ListPageComponent,
-    ConfirmOrderPageComponent,
-    SelectedProductComponent,
-    NotSelectedProductComponent,
-    CreateBillComponent
+    CreateBillComponent,
+    MainPageComponent,
+    CategoryButtonComponent,
+    ProductCardComponent,
+    OrderCardComponent,
+    SelectMenuComponent,
+    OrderSummaryComponent
   ],
-    imports: [
-        CommonModule,
-        MenuRoutingModule,
-        PrimeNgModule,
-        NgOptimizedImage,
-        ProductsManagementModule,
-        ReactiveFormsModule,
-        DividerModule,
-        FormsModule,
-        ScrollPanelModule
-    ]
+  imports: [
+    CommonModule,
+    MenuRoutingModule,
+    PrimeNgModule,
+    NgOptimizedImage,
+    ProductsManagementModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ]
 })
 export class MenuModule { }

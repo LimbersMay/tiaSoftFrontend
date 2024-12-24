@@ -4,6 +4,9 @@ img {
   object-fit: cover;
 }
 
-.product-description {
-  max-width: 20rem;
+@media (max-width: 600px) {
+  img {
+    min-width: 25rem;
+    height: 15rem;
+  }
 }
