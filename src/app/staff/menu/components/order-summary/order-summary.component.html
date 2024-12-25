@@ -40,15 +40,18 @@
       class="max-w-30rem mt-3"
       pTooltip="Agregar mesa"
       tooltipPosition="left"
+      (click)="openTableDialog(null)"
     ></button>
 
     <button
       pButton
       pRipple
       icon="pi pi-pencil"
-      class="max-w-30rem mt-3"
-      pTooltip="Editar mesa"
+      class="max-w-30rem mt-3 pointer-events-auto"
+      [pTooltip]="selectedTable() === null ? 'Seleccione una mesa para editar' : 'Editar mesa'"
       tooltipPosition="left"
+      [disabled]="selectedTable() === null"
+      (click)="openTableDialog(selectedTable())"
     ></button>
   </div>
 

@@ -12,7 +12,7 @@ import {DialogService, DynamicDialogComponent, DynamicDialogRef} from "primeng/d
 })
 export class CreateBillComponent implements OnInit, OnDestroy {
   // Dialog properties
-  public selectedBill!: BillUI;
+  public selectedBill?: BillUI;
   public instance: DynamicDialogComponent | undefined;
 
   public billForm = this.fb.nonNullable.group({
@@ -92,7 +92,7 @@ export class CreateBillComponent implements OnInit, OnDestroy {
 
       // Retrieve the selected bill from the dialog data
       this.selectedBill = selectedBill;
-      this.billForm.patchValue(this.selectedBill);
+      this.billForm.patchValue(selectedBill);
     }
   }
 

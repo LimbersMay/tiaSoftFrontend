@@ -1,0 +1,51 @@
+<!-- Dialog -->
+  <span class="p-text-secondary block mb-5">Proporciona la siguiente información</span>
+  <form action="" [formGroup]="tableForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3" autocomplete="off">
+
+    <div class="flex align-items-center gap-3">
+      <label for="name" class="font-semibold w-6rem">Nombre</label>
+      <input
+        formControlName="name"
+        pInputText id="name"
+        class="flex-auto"
+        autocomplete="off"
+        [ngClass]="getControlClass('name')"
+      />
+    </div>
+
+    <span
+      *ngIf="isValidField('name')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('name') }}
+    </span>
+
+    <!-- Area -->
+    <div class="flex align-items-center gap-3">
+      <label class="font-semibold w-6rem">Area</label>
+      <p-dropdown
+        appendTo="body"
+        formControlName="areaId"
+        [options]="areas"
+        optionLabel="name"
+        optionValue="areaId"
+        [showClear]="false"
+        [filter]="false"
+        [style]="{ width: '100%' }"
+        [placeholder]="'Seleccione un area'"
+        [ngClass]="getControlClass('areaId')"
+      ></p-dropdown>
+    </div>
+
+    <span
+      *ngIf="isValidField('areaId')"
+      class="p-error align-self-center"
+    >
+      {{ getFieldError('areaId') }}
+    </span>
+
+    <div class="flex justify-content-end gap-2 mt-4">
+      <p-button label="Cancel" severity="secondary" (onClick)="onClose()"/>
+      <p-button label="Save" type="submit"/>
+    </div>
+  </form>

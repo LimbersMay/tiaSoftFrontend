@@ -5,6 +5,8 @@ import {TablesService} from "../../../../tables-management/services/tables.servi
 import {ProductsInOrderService} from "../../services/products-in-order.service";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {CreateBillComponent} from "../dialogs/create-bill/create-bill.component";
+import {CreateTableComponent} from "../dialogs/create-table/create-table.component";
+import {LogLevel} from "@microsoft/signalr";
 
 @Component({
   selector: 'menu-order-summary',
@@ -43,6 +45,56 @@ export class OrderSummaryComponent implements OnInit {
     return this.selectedBill()?.total;
   });
 
+  // ---------------------------- TABLE DIALOG MANAGEMENT ---------------------------
+
+  public openTableDialog(table: Table | null) {
+    this.ref = this.dialogService.open(CreateTableComponent, {
+      header: 'Crear mesa',
+      data: {
+        table: table ? structuredClone(table) : null,
+      },
+      contentStyle: { overflow: 'auto' },
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '80%'
+      }
+    });
+
+    // There's not a response from the dialog because it calls an asp.net hub
+    // But we can subscribe to the tables service to get the updated table
+    this.tablesService.onReceiveTable().subscribe((updatedTable: Table) => {
+
+      const tableExists = this.tables().some(t => t.tableId === updatedTable.tableId);
+
+      // If the table does not exist, add it to the list
+      if (!tableExists) {
+        this.tables.update(tables => [...tables, updatedTable]);
+      }
+
+      if (tableExists) {
+        this.tables.update(tables => tables.map(t => {
+          if (t.tableId === updatedTable.tableId) {
+            return updatedTable;
+          }
+
+          return t;
+        }));
+      }
+
+      // Set the selected table
+      this.selectedTable.set(updatedTable);
+    });
+  }
+
+  public openCreateTableDialog() {
+    this.openTableDialog(null);
+  }
+
+  public openEditTableDialog() {
+    this.openTableDialog(this.selectedTable());
+  }
+
+  // ---------------------------- BILL DIALOG MANAGEMENT ----------------------------
   private openBillDialog(bill: BillUI | null) {
     this.ref = this.dialogService.open(CreateBillComponent, {
       header: 'Crear cuenta',

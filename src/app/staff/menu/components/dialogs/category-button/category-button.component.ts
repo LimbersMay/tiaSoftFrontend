@@ -1,5 +1,5 @@
 import {Component, input, output} from '@angular/core';
-import {CategoryUi} from "../../../../categories-management/interfaces/category-ui.interface";
+import {CategoryUi} from "../../../../../categories-management/interfaces/category-ui.interface";
 
 @Component({
   selector: 'menu-category-button',
