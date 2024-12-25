@@ -6,7 +6,6 @@ import {ProductsInOrderService} from "../../services/products-in-order.service";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {CreateBillComponent} from "../dialogs/create-bill/create-bill.component";
 import {CreateTableComponent} from "../dialogs/create-table/create-table.component";
-import {LogLevel} from "@microsoft/signalr";
 
 @Component({
   selector: 'menu-order-summary',
