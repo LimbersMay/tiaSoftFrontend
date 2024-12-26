@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Table} from "../../../../tables-management/interfaces/table.interface";
 import {FormBuilder} from "@angular/forms";
 import {TablesService} from "../../../../tables-management/services/tables.service";
-import {MessageService} from "primeng/api";
 import {Order} from "../../interfaces/order.interface";
 import {OrdersService} from "../../services/orders.service";
 
@@ -31,7 +30,6 @@ export class ListPageComponent implements OnInit {
     private readonly ordersService: OrdersService,
 
     private readonly fb: FormBuilder,
-    private readonly messageService: MessageService
   ) {}
 
   public selectTable(table: Table): void {
