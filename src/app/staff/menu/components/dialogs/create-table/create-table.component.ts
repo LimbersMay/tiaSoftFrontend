@@ -106,8 +106,10 @@ export class CreateTableComponent implements OnInit, OnDestroy {
 
     if (this.instance && this.instance.data) {
       const table = this.instance.data['table'] as Table;
+      const areaId = this.instance.data['areaId'] as string;
 
       if (!table) {
+        this.tableForm.patchValue({ areaId });
         return;
       }
 
