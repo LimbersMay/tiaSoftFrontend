@@ -53,9 +53,6 @@ export class ListPageComponent implements OnInit {
     this.tableService.getTables().subscribe({
       next: (tables) => {
         this.tables = tables;
-      },
-      error: (err) => {
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Ocurrió un error al cargar las mesas'});
       }
     });
 
@@ -63,10 +60,6 @@ export class ListPageComponent implements OnInit {
       next: (orders) => {
         console.log(orders);
         this.orders = orders;
-      },
-      error: (err) => {
-        console.error(err);
-        this.messageService.add({severity: 'error', summary: 'Error', detail: 'Ocurrió un error al cargar las ordenes'});
       }
     })
   }
