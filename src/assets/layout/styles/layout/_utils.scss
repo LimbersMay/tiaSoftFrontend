@@ -1,3 +1,5 @@
+@import "variables";
+
 .card {
     background: var(--surface-card);
     border: 1px solid var(--surface-border);
@@ -9,6 +11,11 @@
     &:last-child {
         margin-bottom: 0;
     }
+}
+
+.card-without-padding {
+    @extend .card;
+    padding: 0;
 }
 
 .p-toast {
