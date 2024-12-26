@@ -13,6 +13,7 @@ import {CreateTableComponent} from "../dialogs/create-table/create-table.compone
   styleUrl: './order-summary.component.scss'
 })
 export class OrderSummaryComponent implements OnInit {
+
   // Services
   public tablesService = inject(TablesService);
   private dialogService = inject(DialogService);
@@ -45,7 +46,6 @@ export class OrderSummaryComponent implements OnInit {
   });
 
   // ---------------------------- TABLE DIALOG MANAGEMENT ---------------------------
-
   public openTableDialog(table: Table | null) {
     this.ref = this.dialogService.open(CreateTableComponent, {
       header: 'Crear mesa',
@@ -58,39 +58,6 @@ export class OrderSummaryComponent implements OnInit {
         '640px': '80%'
       }
     });
-
-    // There's not a response from the dialog because it calls an asp.net hub
-    // But we can subscribe to the tables service to get the updated table
-    this.tablesService.onReceiveTable().subscribe((updatedTable: Table) => {
-
-      const tableExists = this.tables().some(t => t.tableId === updatedTable.tableId);
-
-      // If the table does not exist, add it to the list
-      if (!tableExists) {
-        this.tables.update(tables => [...tables, updatedTable]);
-      }
-
-      if (tableExists) {
-        this.tables.update(tables => tables.map(t => {
-          if (t.tableId === updatedTable.tableId) {
-            return updatedTable;
-          }
-
-          return t;
-        }));
-      }
-
-      // Set the selected table
-      this.selectedTable.set(updatedTable);
-    });
-  }
-
-  public openCreateTableDialog() {
-    this.openTableDialog(null);
-  }
-
-  public openEditTableDialog() {
-    this.openTableDialog(this.selectedTable());
   }
 
   // ---------------------------- BILL DIALOG MANAGEMENT ----------------------------
@@ -159,6 +126,31 @@ export class OrderSummaryComponent implements OnInit {
 
   public ngOnInit() {
     this.getTables();
+
+    // There's not a response from the dialog because it calls an asp.net hub
+    // But we can subscribe to the tables service to get the updated table
+    this.tablesService.onReceiveTable().subscribe((updatedTable: Table) => {
+
+      const tableExists = this.tables().some(t => t.tableId === updatedTable.tableId);
+
+      // If the table does not exist, add it to the list
+      if (!tableExists) {
+        this.tables.update(tables => [...tables, updatedTable]);
+      }
+
+      if (tableExists) {
+        this.tables.update(tables => tables.map(t => {
+          if (t.tableId === updatedTable.tableId) {
+            return updatedTable;
+          }
+
+          return t;
+        }));
+      }
+
+      // Set the selected table
+      this.selectedTable.set(updatedTable);
+    });
   }
 
   private getTables() {
