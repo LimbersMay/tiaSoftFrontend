@@ -11,10 +11,6 @@ const routes: Routes = [
     loadChildren: () => import('./tables/tables.module').then(m => m.TablesModule),
   },
   {
-    path: 'orders',
-    loadChildren: () => import('./orders/orders.module').then(m => m.OrdersModule),
-  },
-  {
     path: '**',
     redirectTo: 'menu'
   }
