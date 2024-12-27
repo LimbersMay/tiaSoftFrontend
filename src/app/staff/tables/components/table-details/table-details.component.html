@@ -1,0 +1,114 @@
+<div class="card-without-padding table-details align-items-center hidden md:flex md:flex-column"
+     [ngClass]="!table() ? 'justify-content-center bg-gray-50' : ''"
+>
+  <!-- If theres not a table selected, blurred -->
+  @if (!table()) {
+    <span>
+      Seleccione una mesa
+    </span>
+  }
+
+  <!-- If theres a table selected, show details -->
+  @if (table()) {
+    <div class="flex flex-column w-full">
+      <div class="flex flex-column w-full p-4">
+        <span>
+          Mesa
+        </span>
+
+        <div class="flex flex-row gap-3 align-items-center justify-content-between">
+          <span class="font-bold text-xl">
+            {{ table()?.name }}
+          </span>
+
+          <!-- Close button -->
+          <button
+            pButton
+            class="p-button-rounded p-button-text"
+            icon="pi pi-times"
+          >
+          </button>
+        </div>
+      </div>
+
+      <p-divider styleClass="w-full m-0" />
+
+      <div class="flex flex-column gap-3 w-full p-4">
+        <span>
+          Estado
+        </span>
+
+        <div class="flex flex-row justify-content-between">
+          <div class="flex flex-row gap-3 align-items-center">
+            <div
+              class="dot"
+              [ngClass]="getTableStatusClass()"
+            ></div>
+            {{ table()?.tableStatus?.name }}
+          </div>
+
+          <p-button
+            label="Nueva orden"
+            [outlined]="true"
+            class="p-button-rounded"
+            icon="pi pi-plus"
+            [disabled]="isPendingAuthorization()"
+          >
+          </p-button>
+        </div>
+      </div>
+
+      <p-divider styleClass="w-full m-0" />
+
+      <p-scrollPanel
+        [style]="{ height: '28rem', width: '100%' }"
+      >
+        <div class="flex flex-column gap-3 w-full p-4">
+        <span>
+          Órdenes
+        </span>
+
+          @for (order of orders(); track order.orderId) {
+            <tables-order-card
+              [order]="order"
+            />
+          }
+        </div>
+      </p-scrollPanel>
+
+      <p-divider styleClass="w-full m-0" />
+
+      <div class="flex flex-column gap-4 w-full p-4">
+        <div class="flex justify-content-between align-items-center">
+          <span class="text-xl">Total</span>
+
+          <span class="font-bold text-xl">
+            {{ totalFromAllOrders() | currency: 'USD': 'symbol-narrow' }}
+          </span>
+        </div>
+
+        <div class="flex flex-column gap-2">
+          <button
+            pButton
+            class="w-full"
+            label="Enviar a caja"
+            icon="pi pi-credit-card"
+            [disabled]="!canBeSentToCashier()"
+            (click)="sendTableToCashier()"
+          >
+          </button>
+
+          <button
+            pButton
+            severity="secondary"
+            class="w-full"
+            label="Imprimir cuenta"
+            icon="pi pi-print"
+            (click)="printTableBill()"
+          >
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

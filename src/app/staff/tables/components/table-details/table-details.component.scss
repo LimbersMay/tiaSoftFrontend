@@ -1,0 +1,12 @@
+.table-details {
+  min-width: 24rem;
+  min-height: 54.7rem;
+  max-width: 24rem;
+}
+
+.dot {
+  width: 12px; /* Tamaño de la bolita */
+  height: 12px;
+  border-radius: 50%; /* Hace que sea circular */
+  background-color: gray; /* Color por defecto */
+}
