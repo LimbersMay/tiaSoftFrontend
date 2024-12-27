@@ -23,6 +23,7 @@ import {ToolbarModule} from "primeng/toolbar";
 import {BadgeModule} from "primeng/badge";
 import {DividerModule} from "primeng/divider";
 import {ScrollPanelModule} from "primeng/scrollpanel";
+import {SpeedDialModule} from "primeng/speeddial";
 
 
 
@@ -53,7 +54,8 @@ import {ScrollPanelModule} from "primeng/scrollpanel";
     ToolbarModule,
     BadgeModule,
     DividerModule,
-    ScrollPanelModule
+    ScrollPanelModule,
+    SpeedDialModule
   ]
 })
 export class PrimeNgModule { }
