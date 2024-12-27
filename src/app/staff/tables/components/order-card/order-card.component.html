@@ -1,0 +1,42 @@
+<div class="bg-gray-50 w-full p-3 border-round-xl">
+  <div class="flex align-items-center justify-content-between mb-2">
+    <div class="flex flex-row align-items-center gap-2">
+      <div class="dot" [ngClass]="getOrderStatusClass()"></div>
+      <span class="text-gray-800">Orden #{{ order().orderNumber }}</span>
+    </div>
+
+    <span class="text-gray-500 text-sm">{{order().createdAt | date: 'yyyy-MM-dd HH:mm' }}</span>
+  </div>
+
+  <div class="flex flex-column gap-2">
+    @for (productItem of order().products; track productItem.productId) {
+      <div class="flex justify-content-between">
+        <div>
+          <span>{{ productItem.productName }}</span> x <span class="text-gray-500">{{ productItem.quantity }}</span>
+        </div>
+
+        <span>
+          {{ productItem.priceAtOrder | currency: 'USD': 'symbol-narrow'}}
+        </span>
+      </div>
+    }
+  </div>
+
+  <p-divider
+    styleClass="w-full p-0"
+  />
+
+  <div class="flex justify-content-between">
+    <span class="text-gray-800">Total</span>
+    <span class="text-gray-800">
+      @if (order().orderStatus.name == OrderStatuses.Cancelado) {
+        <s>
+          {{ order().totalPrice | currency: 'USD': 'symbol-narrow' }}
+        </s>
+      }
+      @else {
+        {{ order().totalPrice | currency: 'USD': 'symbol-narrow' }}
+      }
+    </span>
+  </div>
+</div>
