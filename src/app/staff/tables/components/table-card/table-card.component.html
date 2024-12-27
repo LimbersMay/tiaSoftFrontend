@@ -1,0 +1,10 @@
+
+<button
+  pButton
+  pRipple
+  class="p-5 border-round cursor-pointer text-white border-none"
+  [ngClass]="isSelected() ? getTableSelectedClass() : getTableStatusClass()"
+  (click)="selectTable()"
+>
+  {{ table().name }}
+</button>
