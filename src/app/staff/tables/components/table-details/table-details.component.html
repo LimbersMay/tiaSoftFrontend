@@ -3,9 +3,9 @@
 >
   <!-- If theres not a table selected, blurred -->
   @if (!table()) {
-    <span>
-      Seleccione una mesa
-    </span>
+    <div class="select-table-container flex align-items-center justify-content-center">
+      <span>Seleccione una mesa</span>
+    </div>
   }
 
   <!-- If theres a table selected, show details -->
@@ -53,6 +53,7 @@
             class="p-button-rounded"
             icon="pi pi-plus"
             [disabled]="isPendingAuthorization()"
+            (onClick)="createNewOrder()"
           >
           </p-button>
         </div>
@@ -60,10 +61,10 @@
 
       <p-divider styleClass="w-full m-0" />
 
-      <p-scrollPanel
-        [style]="{ height: '28rem', width: '100%' }"
+      <div
+        class="overflow-scroll orders-container"
       >
-        <div class="flex flex-column gap-3 w-full p-4">
+        <div class="flex flex-column gap-3 p-3">
         <span>
           Órdenes
         </span>
@@ -74,7 +75,7 @@
             />
           }
         </div>
-      </p-scrollPanel>
+      </div>
 
       <p-divider styleClass="w-full m-0" />
 

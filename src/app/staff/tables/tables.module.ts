@@ -9,6 +9,7 @@ import { TableCardComponent } from './components/table-card/table-card.component
 import { TableDetailsComponent } from './components/table-details/table-details.component';
 import { OrderCardComponent } from './components/order-card/order-card.component';
 import {PrintBillComponent} from "./components/dialogs/print-bill/print-bill.component";
+import { CancelOrderProductComponent } from './components/dialogs/cancel-order-product/cancel-order-product.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {PrintBillComponent} from "./components/dialogs/print-bill/print-bill.com
     TableCardComponent,
     TableDetailsComponent,
     OrderCardComponent,
-    PrintBillComponent
+    PrintBillComponent,
+    CancelOrderProductComponent
   ],
     imports: [
         CommonModule,

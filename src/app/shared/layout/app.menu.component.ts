@@ -43,6 +43,6 @@ export class AppMenuComponent implements OnInit {
       }
     ];
 
-    this.model = staffNavItems;
+    this.model = adminNavItems;
   }
 }

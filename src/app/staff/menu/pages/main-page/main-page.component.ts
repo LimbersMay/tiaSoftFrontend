@@ -28,6 +28,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   public categories = signal<CategoryUi[]>([]);
   public products = signal<ProductUI[]>([]);
 
+  // Computed properties
   public productsInOrder = this.productsInOrderService.productsInOrder.asReadonly();
 
   public ref: DynamicDialogRef | undefined;

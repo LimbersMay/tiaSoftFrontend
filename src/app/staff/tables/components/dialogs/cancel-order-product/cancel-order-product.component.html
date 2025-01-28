@@ -1,0 +1,25 @@
+
+<div class="flex flex-column gap-2">
+  <p>Introduce el motivo de cancelación del platillo: <span class="font-bold">{{ orderItem?.productName }}</span></p>
+
+  <textarea
+    pInputTextarea
+    class="w-full p-2 border border-gray-300 rounded-md h-6rem"
+  ></textarea>
+
+  <div class="flex justify-content-end gap-2 mt-2 flex-column md:flex-row">
+    <button
+      pButton
+      label="Cancelar"
+      class="p-button-secondary"
+      (click)="close()"
+    ></button>
+    <button
+      pButton
+      label="Guardar"
+      class="bg-primary"
+      (click)="submit()"
+    ></button>
+  </div>
+</div>
+

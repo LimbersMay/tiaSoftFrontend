@@ -5,7 +5,7 @@ import {TablesService} from "../../../../tables-management/services/tables.servi
 import {ProductsInOrderService} from "../../services/products-in-order.service";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {CreateBillComponent} from "../dialogs/create-bill/create-bill.component";
-import {CreateTableComponent} from "../dialogs/create-table/create-table.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'menu-order-summary',
@@ -18,6 +18,9 @@ export class OrderSummaryComponent implements OnInit {
   public tablesService = inject(TablesService);
   private dialogService = inject(DialogService);
 
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+
   public ref: DynamicDialogRef | undefined;
 
   // Store services
@@ -25,10 +28,11 @@ export class OrderSummaryComponent implements OnInit {
 
   public productsInOrder = this.productsInOrderService.productsInOrder.asReadonly();
 
-  public tables = signal<Table[]>([]);
   public bills = signal<BillUI[]>([]);
 
+  // Incoming from the URL query param
   public selectedTable = signal<Table | null>(null);
+  
   public selectedBill = signal<BillUI | null>(null);
 
   // Computed properties
@@ -44,21 +48,6 @@ export class OrderSummaryComponent implements OnInit {
 
     return this.selectedBill()?.total;
   });
-
-  // ---------------------------- TABLE DIALOG MANAGEMENT ---------------------------
-  public openTableDialog(table: Table | null) {
-    this.ref = this.dialogService.open(CreateTableComponent, {
-      header: 'Crear mesa',
-      data: {
-        table: table ? structuredClone(table) : null,
-      },
-      contentStyle: { overflow: 'auto' },
-      breakpoints: {
-        '960px': '75vw',
-        '640px': '80%'
-      }
-    });
-  }
 
   // ---------------------------- BILL DIALOG MANAGEMENT ----------------------------
   private openBillDialog(bill: BillUI | null) {
@@ -110,59 +99,26 @@ export class OrderSummaryComponent implements OnInit {
     this.openBillDialog(this.selectedBill());
   }
 
-  public onSelectTable(table: Table) {
-    if (table.tableId === 'new') {
-      return;
-    }
-
-    this.bills.set(table.bills.map(bill => ({...bill, items: []})));
-
-    this.selectedTable.set(table);
-  }
-
   public onSelectBill(bill: BillUI) {
     this.selectedBill.set(bill);
   }
 
   public ngOnInit() {
-    this.getTables();
+    this.activatedRoute.queryParams.subscribe(params => {
+      const tableId = params['tableId'] as string;
 
-    // There's not a response from the dialog because it calls an asp.net hub
-    // But we can subscribe to the tables service to get the updated table
-    this.tablesService.onReceiveTable().subscribe((updatedTable: Table) => {
-
-      const tableExists = this.tables().some(t => t.tableId === updatedTable.tableId);
-
-      // If the table does not exist, add it to the list
-      if (!tableExists) {
-        this.tables.update(tables => [...tables, updatedTable]);
+      if (!tableId) {
+        return this.router.navigate(['staff/tables/list']);
       }
 
-      if (tableExists) {
-        this.tables.update(tables => tables.map(t => {
-          if (t.tableId === updatedTable.tableId) {
-            return updatedTable;
-          }
+      this.tablesService.getTableById(tableId).subscribe({
+        next: table => {
+          this.selectedTable.set(table);
+          this.bills.set(table.bills.map(bill => ({...bill, items: []})));
+        }
+      })
 
-          return t;
-        }));
-      }
-
-      // Set the selected table
-      this.selectedTable.set(updatedTable);
-    });
-  }
-
-  private getTables() {
-    this.tablesService.getTables().subscribe({
-      next: tables => {
-
-        // Set the tables
-        this.tables.set(tables);
-
-        // Set the bills
-        this.bills.set(tables[0].bills.map(bill => ({...bill, items: []})),);
-      }
-    });
+      return;
+    })
   }
 }

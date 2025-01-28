@@ -8,16 +8,28 @@
     <span class="text-gray-500 text-sm">{{order().createdAt | date: 'yyyy-MM-dd HH:mm' }}</span>
   </div>
 
-  <div class="flex flex-column gap-2">
+  <div class="flex flex-column">
     @for (productItem of order().products; track productItem.productId) {
-      <div class="flex justify-content-between">
-        <div>
-          <span>{{ productItem.productName }}</span> x <span class="text-gray-500">{{ productItem.quantity }}</span>
+      <div class="flex justify-content-between align-items-center">
+        <div class="flex gap-2">
+          <span class="text-gray-900">{{ productItem.productName }}</span> <span class="text-gray-500">x{{ productItem.quantity }}</span>
         </div>
 
-        <span>
+        <div class="flex justify-content-center align-items-center text-gray-900">
+          <span>
           {{ productItem.priceAtOrder | currency: 'USD': 'symbol-narrow'}}
-        </span>
+          </span>
+
+          <!-- Cancel button -->
+          <button
+            pButton
+            size="small"
+            class="p-button-rounded p-button-text p-button-sm p-button-outlined text-gray-900"
+            icon="pi pi-times"
+            (click)="cancelOrderItem(productItem)"
+          >
+          </button>
+        </div>
       </div>
     }
   </div>

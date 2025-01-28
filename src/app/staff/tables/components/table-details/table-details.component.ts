@@ -8,6 +8,7 @@ import {TablesService} from "../../../../tables-management/services/tables.servi
 import {MessageService} from "primeng/api";
 import {DialogService, DynamicDialogRef} from "primeng/dynamicdialog";
 import {PrintBillComponent} from "../dialogs/print-bill/print-bill.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'tables-table-details',
@@ -19,9 +20,12 @@ export class TableDetailsComponent implements OnChanges {
   // Services
   private ordersService = inject(OrdersService);
   private tablesService = inject(TablesService);
-  private messageService = inject(MessageService);
 
+  private router = inject(Router);
+
+  private messageService = inject(MessageService);
   private dialogService = inject(DialogService);
+
   public ref: DynamicDialogRef | undefined;
 
   // Inputs
@@ -59,6 +63,14 @@ export class TableDetailsComponent implements OnChanges {
         this.messageService.add({severity: 'success', summary: 'Mesa enviada', detail: 'La mesa ha sido enviada a caja correctamente'});
       }
     })
+  }
+
+  public createNewOrder(): void {
+    if (!this.table()) {
+      return;
+    }
+
+    this.router.navigate(['staff', 'menu', 'list'], {queryParams: {tableId: this.table()!.tableId}});
   }
 
   public printTableBill(): void {

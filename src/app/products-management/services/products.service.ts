@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environments} from "../../../../environments/environments";
 import {HttpClient} from "@angular/common/http";
-import {catchError, map, Observable, of, tap, throwError} from "rxjs";
+import {catchError, map, Observable, tap, throwError} from "rxjs";
 import {Product} from "../interfaces/product.interface";
 import {UpdateProductImage} from "../interfaces/update-product-image.interface";
 
@@ -34,14 +34,15 @@ export class ProductsService {
       );
   }
 
-  public updateProductImage(productId: string, image: File): Observable<UpdateProductImage> {
+  public updateProductImage(productId: string, image: File): Observable<string> {
     const url = `${this.baseUrl}/products/updateImage/${productId}`;
 
     const formData = new FormData();
     formData.append('image', image);
 
-    return this.httpClient.post<UpdateProductImage>(url, formData, {
+    return this.httpClient.post(url, formData, {
       withCredentials: true,
+      responseType: 'text'
     })
       .pipe(
         map((result) => result),

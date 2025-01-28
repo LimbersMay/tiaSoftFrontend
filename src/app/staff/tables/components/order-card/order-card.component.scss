@@ -4,3 +4,19 @@
   border-radius: 50%; /* Hace que sea circular */
   background-color: gray; /* Color por defecto */
 }
+
+.cancel-button {
+  background: none; // Sin fondo
+  border: none; // Sin borde
+  padding: 0.5rem; // Hitbox pequeño
+  cursor: pointer; // Cambia el cursor al pasar
+  display: inline-flex; // Centra el ícono
+  align-items: center; // Alinea verticalmente
+  justify-content: center; // Alinea horizontalmente
+  border-radius: 0.25rem; // Bordes redondeados para hover
+
+  i {
+    font-size: 1rem; // Tamaño del ícono
+    color: inherit; // Usa el color del contexto
+  }
+}

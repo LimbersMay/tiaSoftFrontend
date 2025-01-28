@@ -12,6 +12,8 @@ export const serverErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      console.error(error);
+
       const errorMessage = errorService.getErrorMessage(error.error);
 
       if (error.error === ErrorCodes.AuthErrorNotAuthorized) {

@@ -1,7 +1,16 @@
 .table-details {
   min-width: 24rem;
-  min-height: 54.7rem;
   max-width: 24rem;
+}
+
+.orders-container {
+  width: 100%;
+  height: calc(100vh - 37rem);
+}
+
+.select-table-container {
+  width: 100%;
+  height: calc(100vh - 9.5rem);
 }
 
 .dot {
@@ -9,4 +18,17 @@
   height: 12px;
   border-radius: 50%; /* Hace que sea circular */
   background-color: gray; /* Color por defecto */
+}
+
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+  width: 3px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: var(--gray-100);
 }

@@ -121,6 +121,7 @@ export class ListPageComponent implements OnInit {
 
         // If the file input has files, update the product image
         if (this.fileInput.hasFiles()) {
+
           this.uploadImage(product);
         }
       },
@@ -140,7 +141,7 @@ export class ListPageComponent implements OnInit {
         // Update the product image URL in the products array
         this.products = this.products.map(p => {
           if (p.productId === product.productId) {
-            p.imageUrl = result.imagePath;
+            p.imageUrl = result;
           }
 
           return p;
